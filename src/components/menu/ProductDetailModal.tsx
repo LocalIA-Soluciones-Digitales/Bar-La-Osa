@@ -285,7 +285,7 @@ export function ProductDetailModal({
                       alt={producto.nombre}
                       fill
                       sizes="(min-width: 768px) 380px, 90vw"
-                      className="object-contain"
+                      className="object-cover object-center"
                     />
                   </div>
                 )
