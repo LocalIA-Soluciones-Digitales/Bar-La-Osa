@@ -629,6 +629,64 @@ update restaurant.productos p set precio_barra_centimos = 2050, precio_salon_cen
 from restaurant.categorias c
 where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Brunch';
 
+-- 2b. Segunda pasada: productos cuyo nombre en la carta difiere del nombre
+--     mostrado en el TPV (plural, apodo, variante de formato...) pero cuyo
+--     precio en foto era inequívoco.
+update restaurant.productos p set precio_barra_centimos = 1500, precio_salon_centimos = 1500, precio_terraza_centimos = 1510, precio_centimos = 1500
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'Niku Roll'; -- pantalla "Niku Roll 2.0"
+update restaurant.productos p set precio_barra_centimos = 1400, precio_salon_centimos = 1400, precio_terraza_centimos = 1410, precio_centimos = 1400
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'Sake a la Brasa'; -- pantalla "Sake a la Llama"
+update restaurant.productos p set precio_barra_centimos = 1350, precio_salon_centimos = 1350, precio_terraza_centimos = 1360, precio_centimos = 1350
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'Ura Chicken Roll'; -- pantalla "Furaidochiken"
+update restaurant.productos p set precio_barra_centimos = 1100, precio_salon_centimos = 1100, precio_terraza_centimos = 1110, precio_centimos = 1100
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'Langostino'; -- pantalla "Langostinos"
+update restaurant.productos p set precio_barra_centimos = 850, precio_salon_centimos = 850, precio_terraza_centimos = 860, precio_centimos = 850
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'Brochetas Pollo'; -- pantalla "Brochetas Pollo"
+update restaurant.productos p set precio_barra_centimos = 950, precio_salon_centimos = 950, precio_terraza_centimos = 960, precio_centimos = 950
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'varios' and p.nombre = 'C.Jamón (roll)'; -- pantalla "C.JAMON", confianza media
+update restaurant.productos p set precio_barra_centimos = 850, precio_salon_centimos = 850, precio_terraza_centimos = 860, precio_centimos = 850
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'cocteles' and p.nombre = 'Old Fashioned'; -- pantalla "Old Fashion"
+update restaurant.productos p set precio_barra_centimos = 900, precio_salon_centimos = 900, precio_terraza_centimos = 910, precio_centimos = 900
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'combinados' and p.nombre = 'Gin Raw';
+update restaurant.productos p set precio_barra_centimos = 750, precio_salon_centimos = 750, precio_terraza_centimos = 760, precio_centimos = 750
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'combinados' and p.nombre = 'London Nº1'; -- pantalla "London N1"
+update restaurant.productos p set precio_barra_centimos = 950, precio_salon_centimos = 950, precio_terraza_centimos = 960, precio_centimos = 950
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'combinados' and p.nombre = 'Matusalem'; -- pantalla "Matusalen"
+update restaurant.productos p set precio_barra_centimos = 850, precio_salon_centimos = 850, precio_terraza_centimos = 860, precio_centimos = 850
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'combinados' and p.nombre = 'Ron 311'; -- pantalla "311"
+update restaurant.productos p set precio_barra_centimos = 800, precio_salon_centimos = 800, precio_terraza_centimos = 810, precio_centimos = 800
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'combinados' and p.nombre = 'Ballantine''s'; -- pantalla "Ballantines"
+update restaurant.productos p set precio_barra_centimos = 320, precio_salon_centimos = 330, precio_terraza_centimos = 340, precio_centimos = 330
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'cerveza' and p.nombre = 'Estrella Reposada';
+update restaurant.productos p set precio_barra_centimos = 630, precio_salon_centimos = 630, precio_terraza_centimos = 640, precio_centimos = 630
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Tortillas'; -- pantalla: Queso/Bonito/Txaka, las 3 iguales a 6,30
+update restaurant.productos p set precio_barra_centimos = 690, precio_salon_centimos = 690, precio_terraza_centimos = 700, precio_centimos = 690
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Tortitas'; -- pantalla: Plátano Lotus/Nutella, ambas iguales a 6,90
+update restaurant.productos p set precio_barra_centimos = 300, precio_salon_centimos = 300, precio_terraza_centimos = 300, precio_centimos = 300
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Zumo Desayuno';
+update restaurant.productos p set precio_barra_centimos = 90, precio_salon_centimos = 90, precio_terraza_centimos = 90, precio_centimos = 90
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Suplemento Ingrediente';
+update restaurant.productos p set precio_barra_centimos = 30, precio_salon_centimos = 30, precio_terraza_centimos = 30, precio_centimos = 30
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Suplemento Vaso';
+
 -- 3. Para el resto de productos del proyecto (otros clientes / futuros
 --    productos sin tarifa específica) las 3 columnas quedan NULL y la app
 --    debe hacer fallback a precio_centimos.
