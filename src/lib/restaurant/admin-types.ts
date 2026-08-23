@@ -17,6 +17,9 @@ export interface ProductoAdmin {
   nombre: string;
   descripcion: string | null;
   precio_centimos: number;
+  precio_barra_centimos: number | null;
+  precio_salon_centimos: number | null;
+  precio_terraza_centimos: number | null;
   imagen_url: string | null;
   disponible: boolean;
   destacado: boolean;

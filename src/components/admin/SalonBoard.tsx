@@ -37,6 +37,7 @@ import {
   unirMesasAdmin,
 } from "@/lib/restaurant/admin-queries";
 import { prefijoZona } from "@/lib/restaurant/mesa-label";
+import { tarifaDeZona } from "@/lib/restaurant/precio-zona";
 import { esBloqueo } from "@/lib/restaurant/reserva-bloqueo";
 import { renderTicketComandaHTML, renderTicketCuentaHTML, imprimirTicketHTML } from "@/lib/print/ticket";
 import { PedidoRapidoForm } from "@/components/admin/PedidoRapidoForm";
@@ -1466,6 +1467,7 @@ export function SalonBoard({ mesasIniciales }: { mesasIniciales: MesaEstadoAdmin
                   <PedidoRapidoForm
                     mesaIdentificador={mesaSeleccionada.identificador}
                     onPedidoCreado={refetch}
+                    tarifa={tarifaDeZona(mesaSeleccionada.zona_id, zonas)}
                   />
                 ) : null}
               </div>

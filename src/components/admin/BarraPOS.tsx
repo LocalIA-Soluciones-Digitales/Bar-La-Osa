@@ -7,6 +7,7 @@ import { formatCentimos } from "@/lib/format";
 import { renderTicketComandaHTML, renderTicketCuentaHTML, imprimirTicketHTML } from "@/lib/print/ticket";
 import type { Categoria, Producto } from "@/lib/restaurant/types";
 import type { PedidoCocina } from "@/lib/restaurant/cocina-types";
+import { precioPorTarifa } from "@/lib/restaurant/precio-zona";
 import { ProductGridPicker } from "@/components/admin/ProductGridPicker";
 import { CheckIcon, PrinterIcon, TrashIcon } from "@/components/icons";
 
@@ -58,7 +59,10 @@ export function BarraPOS() {
     [cantidades, productos],
   );
 
-  const totalCentimos = lineas.reduce((sum, l) => sum + l.producto.precio_centimos * l.cantidad, 0);
+  const totalCentimos = lineas.reduce(
+    (sum, l) => sum + precioPorTarifa(l.producto, "barra") * l.cantidad,
+    0,
+  );
   const totalUnidades = lineas.reduce((sum, l) => sum + l.cantidad, 0);
 
   const vaciar = () => {
@@ -101,7 +105,7 @@ export function BarraPOS() {
       items: lineas.map((l) => ({
         cantidad: l.cantidad,
         nombre: l.producto.nombre,
-        precioUnitarioCentimos: l.producto.precio_centimos,
+        precioUnitarioCentimos: precioPorTarifa(l.producto, "barra"),
       })),
     });
     imprimirTicketHTML(html);
@@ -121,6 +125,7 @@ export function BarraPOS() {
             cantidades={cantidades}
             onCantidadChange={setCantidad}
             gridClassName="grid-cols-3 sm:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
+            tarifa="barra"
           />
         )}
       </div>
@@ -153,7 +158,7 @@ export function BarraPOS() {
                     <span className="text-noche-ink-muted">{l.cantidad}×</span> {l.producto.nombre}
                   </span>
                   <span className="shrink-0 text-noche-ink-muted">
-                    {formatCentimos(l.producto.precio_centimos * l.cantidad)} €
+                    {formatCentimos(precioPorTarifa(l.producto, "barra") * l.cantidad)} €
                   </span>
                 </li>
               ))}

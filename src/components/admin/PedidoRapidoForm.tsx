@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 import { getCarta, getCategorias, crearPedido } from "@/lib/restaurant/queries";
 import { formatCentimos } from "@/lib/format";
 import type { Categoria, Producto } from "@/lib/restaurant/types";
+import { precioPorTarifa, type TarifaZona } from "@/lib/restaurant/precio-zona";
 import { PlusIcon } from "@/components/icons";
 import { ProductGridPicker } from "@/components/admin/ProductGridPicker";
 
 export function PedidoRapidoForm({
   mesaIdentificador,
   onPedidoCreado,
+  tarifa = "salon",
 }: {
   mesaIdentificador: string;
   onPedidoCreado: () => void;
+  /** Tarifa de la zona de la mesa (barra/salón/terraza) para mostrar el precio correcto. */
+  tarifa?: TarifaZona;
 }) {
   const [abierto, setAbierto] = useState(false);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -47,7 +51,7 @@ export function PedidoRapidoForm({
     }));
 
   const totalCentimos = lineas.reduce(
-    (sum, l) => sum + l.producto.precio_centimos * l.cantidad,
+    (sum, l) => sum + precioPorTarifa(l.producto, tarifa) * l.cantidad,
     0,
   );
 
@@ -112,6 +116,7 @@ export function PedidoRapidoForm({
             onCantidadChange={setCantidad}
             className="mt-3"
             listMaxHeightClassName="max-h-56"
+            tarifa={tarifa}
           />
 
           {error ? <p className="mt-2 text-xs text-noche-danger">{error}</p> : null}

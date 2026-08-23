@@ -12,6 +12,12 @@ export interface Producto {
   nombre: string;
   descripcion: string | null;
   precio_centimos: number;
+  /** Precio en barra. Si es null, se usa precio_centimos como valor único. */
+  precio_barra_centimos: number | null;
+  /** Precio en salón/interior. Si es null, se usa precio_centimos como valor único. */
+  precio_salon_centimos: number | null;
+  /** Precio en terraza (normalmente precio_salon_centimos + suplemento). Si es null, se usa precio_centimos. */
+  precio_terraza_centimos: number | null;
   imagen_url: string | null;
   disponible: boolean;
   destacado: boolean;

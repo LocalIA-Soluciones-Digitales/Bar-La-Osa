@@ -472,8 +472,35 @@ export function ProductosGestion() {
                               <span className="text-xs text-noche-primary">Destacado</span>
                             ) : null}
                           </div>
-                          <span className="w-16 shrink-0 text-right text-sm text-noche-ink-muted">
-                            {formatCentimos(producto.precio_centimos)} €
+                          <span className="w-24 shrink-0 text-right text-sm text-noche-ink-muted">
+                            {producto.precio_barra_centimos != null ||
+                            producto.precio_salon_centimos != null ||
+                            producto.precio_terraza_centimos != null ? (
+                              <span
+                                className="block leading-tight"
+                                title="Barra / Salón / Terraza"
+                              >
+                                <span className="block">
+                                  {formatCentimos(
+                                    producto.precio_barra_centimos ?? producto.precio_centimos,
+                                  )}{" "}
+                                  /{" "}
+                                  {formatCentimos(
+                                    producto.precio_salon_centimos ?? producto.precio_centimos,
+                                  )}{" "}
+                                  /{" "}
+                                  {formatCentimos(
+                                    producto.precio_terraza_centimos ?? producto.precio_centimos,
+                                  )}{" "}
+                                  €
+                                </span>
+                                <span className="text-[10px] uppercase tracking-widest2 text-noche-ink-faint">
+                                  Barra / Salón / Terraza
+                                </span>
+                              </span>
+                            ) : (
+                              `${formatCentimos(producto.precio_centimos)} €`
+                            )}
                           </span>
                           <button
                             type="button"

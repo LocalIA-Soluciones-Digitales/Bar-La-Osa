@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { formatCentimos } from "@/lib/format";
 import type { Categoria, Producto } from "@/lib/restaurant/types";
+import { precioPorTarifa, type TarifaZona } from "@/lib/restaurant/precio-zona";
 import { CloseIcon, MinusIcon, PlusIcon, SearchIcon } from "@/components/icons";
 
 const TIPO_LABEL: Record<string, string> = {
@@ -21,6 +22,7 @@ export function ProductGridPicker({
   className,
   gridClassName = "grid-cols-2",
   listMaxHeightClassName,
+  tarifa = "salon",
 }: {
   categorias: Categoria[];
   productos: Producto[];
@@ -31,6 +33,8 @@ export function ProductGridPicker({
   className?: string;
   gridClassName?: string;
   listMaxHeightClassName?: string;
+  /** Tarifa a mostrar según la zona de la mesa/pedido (barra/salón/terraza). */
+  tarifa?: TarifaZona;
 }) {
   const [busqueda, setBusqueda] = useState("");
 
@@ -101,7 +105,7 @@ export function ProductGridPicker({
             <div className="flex flex-col items-center p-2 text-center">
               <p className="text-base font-semibold leading-snug text-noche-ink">{producto.nombre}</p>
               <p className="mt-0.5 text-xs text-noche-ink-muted">
-                {formatCentimos(producto.precio_centimos)} €
+                {formatCentimos(precioPorTarifa(producto, tarifa))} €
               </p>
               <div className="mt-2 flex items-center justify-between self-stretch">
                 <button
