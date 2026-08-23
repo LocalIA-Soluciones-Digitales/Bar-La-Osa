@@ -114,10 +114,23 @@ function construirTicketComanda(printer, pedido, items, etiquetaDestino) {
   printer.cut();
 }
 
-async function imprimirComandaCocina(pedido) {
-  const itemsCocina = (pedido.items ?? []).filter((item) => item.producto_tipo !== "bebida");
-  if (itemsCocina.length === 0) return;
+/** Una estación (comida o bebida) está lista para imprimirse cuando alguien
+ * ya la ha aceptado, es decir, ninguna de sus líneas activas sigue en
+ * RECIBIDO. Las líneas canceladas no cuentan (no bloquean ni disparan nada). */
+function estacionAceptada(items) {
+  const activos = items.filter((item) => item.estado !== "CANCELLED");
+  return activos.length > 0 && activos.every((item) => item.estado !== "RECEIVED");
+}
 
+function itemsPorEstacion(pedido) {
+  const items = pedido.items ?? [];
+  return {
+    comida: items.filter((item) => item.producto_tipo !== "bebida"),
+    bebida: items.filter((item) => item.producto_tipo === "bebida"),
+  };
+}
+
+async function imprimirComandaCocina(pedido, itemsCocina) {
   try {
     construirTicketComanda(printerCocina, pedido, itemsCocina, "COCINA");
     await printerCocina.execute();
@@ -127,10 +140,7 @@ async function imprimirComandaCocina(pedido) {
   }
 }
 
-async function imprimirComandaBarra(pedido) {
-  const itemsBarra = (pedido.items ?? []).filter((item) => item.producto_tipo === "bebida");
-  if (itemsBarra.length === 0) return;
-
+async function imprimirComandaBarra(pedido, itemsBarra) {
   try {
     construirTicketComanda(printerBarra, pedido, itemsBarra, "BARRA");
     const buffer = printerBarra.getBuffer();
@@ -141,6 +151,9 @@ async function imprimirComandaBarra(pedido) {
   }
 }
 
+// Imprime cada estación (comida/bebida) la primera vez que se detecta
+// aceptada — tanto si se aceptó el pedido entero de golpe desde "Todos"
+// (mixto o no) como si se aceptó solo su estación desde "Cocina"/"Barra".
 async function revisarPedidosPendientes() {
   const { data, error } = await supabase.rpc("get_pedidos_cocina");
   if (error) {
@@ -149,15 +162,15 @@ async function revisarPedidosPendientes() {
   }
 
   for (const pedido of data ?? []) {
-    if (pedido.estado !== "RECEIVED") continue;
+    const { comida, bebida } = itemsPorEstacion(pedido);
 
-    if (!impresosCocina.has(pedido.id)) {
+    if (!impresosCocina.has(pedido.id) && estacionAceptada(comida)) {
       impresosCocina.add(pedido.id);
-      await imprimirComandaCocina(pedido);
+      await imprimirComandaCocina(pedido, comida);
     }
-    if (!impresosBarra.has(pedido.id)) {
+    if (!impresosBarra.has(pedido.id) && estacionAceptada(bebida)) {
       impresosBarra.add(pedido.id);
-      await imprimirComandaBarra(pedido);
+      await imprimirComandaBarra(pedido, bebida);
     }
   }
 }
@@ -182,14 +195,16 @@ async function main() {
   );
   console.log(`Impresora de BARRA configurada en el puerto Windows "${PRINTER_BARRA_PUERTO_WINDOWS}" (no se comprueba conexión de antemano).`);
 
-  // No reimprimir lo que ya estuviera pendiente antes de arrancar el servicio.
+  // No reimprimir estaciones que ya estuvieran aceptadas antes de arrancar el
+  // servicio; las que sigan esperando aceptación se imprimirán en cuanto se acepten.
   const { data: existentes } = await supabase.rpc("get_pedidos_cocina");
   for (const pedido of existentes ?? []) {
-    impresosCocina.add(pedido.id);
-    impresosBarra.add(pedido.id);
+    const { comida, bebida } = itemsPorEstacion(pedido);
+    if (estacionAceptada(comida)) impresosCocina.add(pedido.id);
+    if (estacionAceptada(bebida)) impresosBarra.add(pedido.id);
   }
-  console.log(`Listo. ${(existentes ?? []).length} pedido(s) existentes marcados como ya vistos.`);
-  console.log("Esperando pedidos nuevos...");
+  console.log(`Listo. ${(existentes ?? []).length} pedido(s) existentes revisados.`);
+  console.log("Esperando aceptaciones...");
 
   const channel = supabase
     .channel("cocina-print-bridge")

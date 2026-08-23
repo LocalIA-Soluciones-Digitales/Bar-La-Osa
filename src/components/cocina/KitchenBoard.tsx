@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatCentimos } from "@/lib/format";
 import { playNewOrderChime } from "@/lib/notify-sound";
@@ -98,7 +98,6 @@ export function KitchenBoard({ pedidosIniciales }: { pedidosIniciales: PedidoCoc
   const [actualizando, setActualizando] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
   const [filtro, setFiltro] = useState<FiltroTipo>("todos");
-  const impresosRef = useRef<Set<string>>(new Set(pedidosIniciales.map((p) => p.id)));
 
   const refetch = useCallback(async () => {
     const supabase = createSupabaseBrowserClient();
@@ -141,30 +140,6 @@ export function KitchenBoard({ pedidosIniciales }: { pedidosIniciales: PedidoCoc
       supabase.removeChannel(channel);
     };
   }, [refetch]);
-
-  useEffect(() => {
-    for (const pedido of pedidos) {
-      if (impresosRef.current.has(pedido.id)) continue;
-      impresosRef.current.add(pedido.id);
-
-      const itemsCocina = pedido.items
-        .filter((item) => item.producto_tipo !== "bebida")
-        .map((item) => ({ cantidad: item.cantidad, nombre: item.producto_nombre, notas: item.notas }));
-
-      if (itemsCocina.length === 0) continue;
-
-      const html = renderTicketComandaHTML({
-        destino: "COCINA",
-        mesaEtiqueta: pedido.mesa_numero ? String(pedido.mesa_numero) : "-",
-        mesaNombre: pedido.mesa_nombre,
-        salonNombre: null,
-        pax: null,
-        notasGenerales: pedido.notas,
-        items: itemsCocina,
-      });
-      imprimirTicketHTML(html);
-    }
-  }, [pedidos]);
 
   const avanzar = async (pedidoId: string, nuevoEstado: EstadoPedido) => {
     setActualizando(pedidoId);
@@ -305,7 +280,11 @@ export function KitchenBoard({ pedidosIniciales }: { pedidosIniciales: PedidoCoc
                 if (pedido.estado === "READY") {
                   accion = { label: "Entregado", onClick: () => avanzar(pedido.id, "DELIVERED") };
                 } else if (filtro === "todos") {
-                  if (mixto) {
+                  // El primer paso (Aceptar) se puede hacer desde "Todos" aunque el pedido
+                  // mezcle comida y bebida — acepta ambas estaciones a la vez y dispara la
+                  // impresión en las dos impresoras. Los pasos siguientes (preparación, listo)
+                  // sí requieren ir a la pestaña de cada estación por separado.
+                  if (mixto && pedido.estado !== "RECEIVED") {
                     avisoMixto = true;
                   } else {
                     const siguiente = SIGUIENTE_ESTADO[pedido.estado];
@@ -424,9 +403,9 @@ export function KitchenBoard({ pedidosIniciales }: { pedidosIniciales: PedidoCoc
                       </p>
                     ) : avisoMixto ? (
                       <p className="mt-3 text-center text-xs text-noche-ink-muted">
-                        Este pedido tiene comida y bebida: cada estación avanza por su cuenta.
-                        Ve a la pestaña <span className="font-semibold text-noche-ink">Cocina</span> o{" "}
-                        <span className="font-semibold text-noche-ink">Barra</span> para aceptarlo y
+                        Este pedido tiene comida y bebida: cada estación avanza por su cuenta a
+                        partir de aquí. Ve a la pestaña <span className="font-semibold text-noche-ink">Cocina</span>{" "}
+                        o <span className="font-semibold text-noche-ink">Barra</span> para
                         prepararlo — aquí solo se marca &quot;Entregado&quot; cuando las dos estén listas.
                       </p>
                     ) : null}

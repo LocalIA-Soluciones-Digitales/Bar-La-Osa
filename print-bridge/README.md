@@ -1,18 +1,27 @@
 # Print bridge — comanda automática de cocina y barra
 
 Servicio local (Node.js) que se queda escuchando los pedidos de Palomita Bar
-en Supabase y, en cuanto entra uno nuevo, lo reparte automáticamente entre
-las dos impresoras térmicas del local, sin que nadie tenga que darle a
-ningún botón:
+en Supabase y, en cuanto **se acepta** una comanda (botón "Aceptar" en
+`/admin/cocina`, desde la pestaña "Todos", "Cocina" o "Barra"), imprime
+automáticamente cada estación en su impresora, sin que nadie tenga que darle
+a ningún botón de imprimir:
 
-- **COCINA** (impresora en red, IP fija): solo los productos de comida.
+- **COCINA** (impresora en red, IP fija): solo los productos de comida, en
+  cuanto la estación de comida queda aceptada.
 - **BARRA** (impresora "TICKET", por USB en el propio PC de la TPV): solo
-  los productos de bebida.
+  los productos de bebida, en cuanto la estación de bebida queda aceptada.
+
+Ojo: no imprime al **crear** el pedido, sino al **aceptarlo** — así cocina/
+barra no ven un ticket hasta que alguien ha confirmado que lo va a preparar.
+Si un pedido mezcla comida y bebida y se acepta entero de una vez desde la
+pestaña "Todos", salen los dos tickets a la vez; si cada estación se acepta
+por separado (pestañas "Cocina"/"Barra"), cada ticket sale en el momento en
+que se acepta su propia estación.
 
 Los botones "Imprimir comanda"/"Imprimir cuenta" de `/admin/mesas` y
-`/admin/barra` siguen existiendo aparte (imprimen a mano, vía el navegador,
-todo lo del pedido) para reimprimir algo puntual — pero para el día a día,
-con este servicio corriendo ya no hace falta usarlos para las comandas.
+`/admin/barra`, y "Reimprimir comanda" en `/admin/cocina`, siguen existiendo
+aparte (imprimen a mano, vía el navegador) para reimprimir algo puntual —
+para el día a día, con este servicio corriendo ya no hace falta usarlos.
 
 Es un proceso aparte de la web (la web vive en Vercel y no puede hablar con
 las impresoras de la red del bar). Este servicio se ejecuta en el propio PC
