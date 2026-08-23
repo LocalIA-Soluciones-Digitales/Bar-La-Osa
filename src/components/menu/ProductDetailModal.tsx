@@ -261,7 +261,7 @@ export function ProductDetailModal({
               {producto.imagen_url ? (
                 <div
                   className={`relative mt-3 overflow-hidden rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "aspect-[2/3] w-full max-w-[220px] self-center" : "aspect-[3/4] w-full"
+                    esBebidaLarga ? "h-44 w-32 self-center" : "h-40 w-full"
                   }`}
                 >
                   <Image
@@ -275,7 +275,7 @@ export function ProductDetailModal({
               ) : (
                 <div
                   className={`mt-3 rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "aspect-[2/3] w-full max-w-[220px] self-center" : "aspect-[3/4] w-full"
+                    esBebidaLarga ? "h-44 w-32 self-center" : "h-40 w-full"
                   }`}
                 />
               )}
