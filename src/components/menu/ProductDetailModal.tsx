@@ -148,8 +148,6 @@ export function ProductDetailModal({
   const macros = useMemo(() => macroBreakdown(producto), [producto]);
   const tieneNutricion = producto.ingredientes.length > 0 || producto.calorias != null;
 
-  const esBebidaLarga = categoriaNombre === "Cócteles" || categoriaNombre === "Combinados";
-
   const goPrev = () => onNavigate((activeIndex - 1 + items.length) % items.length);
   const goNext = () => onNavigate((activeIndex + 1) % items.length);
 
@@ -259,25 +257,17 @@ export function ProductDetailModal({
               </div>
 
               {producto.imagen_url ? (
-                <div
-                  className={`relative mt-3 overflow-hidden rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "h-44 w-32 self-center" : "h-40 w-full"
-                  }`}
-                >
+                <div className="relative mt-3 aspect-square w-full max-h-56 overflow-hidden rounded-xl bg-noche-surface-2">
                   <Image
                     src={producto.imagen_url}
                     alt={producto.nombre}
                     fill
                     sizes="(min-width: 768px) 380px, 90vw"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               ) : (
-                <div
-                  className={`mt-3 rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "h-44 w-32 self-center" : "h-40 w-full"
-                  }`}
-                />
+                <div className="mt-3 aspect-square w-full max-h-56 rounded-xl bg-noche-surface-2" />
               )}
 
               <h2 className="mt-3 font-display text-xl text-noche-ink sm:text-2xl">{producto.nombre}</h2>
