@@ -687,6 +687,91 @@ update restaurant.productos p set precio_barra_centimos = 30, precio_salon_centi
 from restaurant.categorias c
 where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno' and p.nombre = 'Suplemento Vaso';
 
+-- 2c. Nombres que se solapaban en la foto con otro producto: precio asignado
+--     por criterio propio (el más consistente con el resto de la carta),
+--     no por lectura directa e inequívoca de la foto — revisar si hay dudas.
+update restaurant.productos p set precio_barra_centimos = 900, precio_salon_centimos = 900, precio_terraza_centimos = 910, precio_centimos = 900
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'cafes' and p.nombre = 'Café Irlandés'; -- fila leída como "C.IRLANDES / VALENCIANO"; se asigna a Café Irlandés por ser el nombre de artículo literal. "Valenciano" (cócteles) queda a 0.
+update restaurant.productos p set precio_barra_centimos = 170, precio_salon_centimos = 170, precio_terraza_centimos = 180, precio_centimos = 170
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'cerveza' and p.nombre = 'Zurito Radler'; -- filas solapadas; igualado a Zurito/Zurito Tostado (mismo formato "zurito")
+update restaurant.productos p set precio_barra_centimos = 280, precio_salon_centimos = 280, precio_terraza_centimos = 290, precio_centimos = 280
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'vino' and p.nombre = 'Heras Cordón Verdejo'; -- sin lectura propia; igualado al Heras Cordón tinto (2,80€) por consistencia de bodega
+update restaurant.productos p set precio_barra_centimos = 380, precio_salon_centimos = 380, precio_terraza_centimos = 390, precio_centimos = 380
+from restaurant.categorias c
+where p.categoria_id = c.id and c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'vermouth' and p.nombre = 'Vermut Preparado'; -- segunda lectura "V.PREPARADO" a 3,80€ (la primera, 3,50€, ya asignada al Vermut Preparado de Cócteles)
+
+-- 2d. La carta idealizada tenía un solo producto genérico donde el TPV real
+--     mostraba varias variantes seleccionables con precios distintos (Tostas,
+--     Bowl, Dulce, Pulguita de Desayuno). Se crean como productos nuevos y se
+--     retira (no se borra) el genérico para no perder el historial.
+update restaurant.productos
+set disponible = false
+where cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid
+  and categoria_id in (select id from restaurant.categorias where cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and slug = 'desayuno')
+  and nombre in ('Tostas', 'Bowl', 'Dulce', 'Pulguita');
+
+insert into restaurant.productos (cliente_id, categoria_id, nombre, precio_centimos, precio_barra_centimos, precio_salon_centimos, precio_terraza_centimos, disponible, orden)
+select 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid, c.id, v.nombre, v.salon, v.barra, v.salon, v.salon + 10, true, v.orden
+from restaurant.categorias c
+cross join (values
+  ('Tosta Mantequilla', 420, 420, 100),
+  ('Tosta Pan Tumaca',  490, 490, 101),
+  ('Tosta Palomita',    700, 700, 102),
+  ('Tosta Vegana',      590, 590, 103),
+  ('Tosta Carrillera',  690, 690, 104),
+  ('Tosta Salmón',      690, 690, 105),
+  ('Tosta Toscana',     590, 590, 106)
+) as v(nombre, barra, salon, orden)
+where c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno'
+and not exists (
+  select 1 from restaurant.productos pr
+  where pr.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and pr.categoria_id = c.id and pr.nombre = v.nombre
+);
+
+insert into restaurant.productos (cliente_id, categoria_id, nombre, precio_centimos, precio_barra_centimos, precio_salon_centimos, precio_terraza_centimos, disponible, orden)
+select 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid, c.id, v.nombre, v.salon, v.barra, v.salon, v.salon + 10, true, v.orden
+from restaurant.categorias c
+cross join (values
+  ('Bowl Granola y Fruta',       620, 620, 107),
+  ('Bowl Granola, Miel y Nueces',650, 650, 108),
+  ('Bowl Miel y Nueces',         690, 690, 109)
+) as v(nombre, barra, salon, orden)
+where c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno'
+and not exists (
+  select 1 from restaurant.productos pr
+  where pr.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and pr.categoria_id = c.id and pr.nombre = v.nombre
+);
+
+insert into restaurant.productos (cliente_id, categoria_id, nombre, precio_centimos, precio_barra_centimos, precio_salon_centimos, precio_terraza_centimos, disponible, orden)
+select 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid, c.id, v.nombre, v.salon, v.barra, v.salon, v.salon + 10, true, v.orden
+from restaurant.categorias c
+cross join (values
+  ('Dulce Cookie',      470, 470, 110),
+  ('Dulce Napolitana',  450, 450, 111)
+) as v(nombre, barra, salon, orden)
+where c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno'
+and not exists (
+  select 1 from restaurant.productos pr
+  where pr.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and pr.categoria_id = c.id and pr.nombre = v.nombre
+);
+
+insert into restaurant.productos (cliente_id, categoria_id, nombre, precio_centimos, precio_barra_centimos, precio_salon_centimos, precio_terraza_centimos, disponible, orden)
+select 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid, c.id, v.nombre, v.salon, v.barra, v.salon, v.salon + 10, true, v.orden
+from restaurant.categorias c
+cross join (values
+  ('Pulguita Jamón',  390, 390, 112),
+  ('Pulguita Bonito', 390, 390, 113),
+  ('Pulguita Tumaca', 410, 410, 114)
+) as v(nombre, barra, salon, orden)
+where c.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and c.slug = 'desayuno'
+and not exists (
+  select 1 from restaurant.productos pr
+  where pr.cliente_id = 'e73669e4-7951-41f0-aa9a-16b391d0015c'::uuid and pr.categoria_id = c.id and pr.nombre = v.nombre
+);
+
 -- 3. Para el resto de productos del proyecto (otros clientes / futuros
 --    productos sin tarifa específica) las 3 columnas quedan NULL y la app
 --    debe hacer fallback a precio_centimos.
