@@ -825,6 +825,11 @@ function Architecture({ focusZona }: { focusZona: PrefijoZona | null }) {
         </Text>
       </group>
 
+      {/* Pasillo entre la Sala principal y la Barra/Salón: hueco de paso (x≈2.35-4.3) siempre visible,
+          independiente de la zona enfocada, con acceso a los baños y la escalera. */}
+      <RestroomEntrance position={[3.3, 0, -6.1]} />
+      <Staircase position={[3.3, 0, 0.5]} />
+
       {/* Ventanal con montantes: separa la sala de la terraza exterior, con hueco de puerta */}
       <group position={[0, 1.7, 6.1]}>
         {(() => {
@@ -932,8 +937,10 @@ function Architecture({ focusZona }: { focusZona: PrefijoZona | null }) {
           <meshStandardMaterial color="#d8cdb8" roughness={0.8} />
         </mesh>
 
-        {/* Toldo con el logo de neón: por encima del logo (y=3.1, radio ~0.53) para que no se solape con él */}
-        <mesh position={[0, 3.85, 0.2]} castShadow>
+        {/* Toldo con el logo de neón: por encima del logo (y=3.1, radio ~0.53) para que no se solape con él.
+            Sin castShadow: al ser un toldo alto y estrecho, su sombra proyectada se alargaba en punta
+            (forma de "vela") hasta cortar el rótulo "SALA PRINCIPAL" en el suelo de la sala. */}
+        <mesh position={[0, 3.85, 0.2]}>
           <boxGeometry args={[PUERTA_ANCHO + 0.7, 0.09, 0.42]} />
           <meshStandardMaterial color="#4a1f2e" roughness={0.7} />
         </mesh>
@@ -1110,6 +1117,106 @@ function WoodBench({ position }: { position: [number, number, number] }) {
           <meshStandardMaterial color="#5b3a24" roughness={0.85} />
         </mesh>
       ))}
+    </group>
+  );
+}
+
+// Puerta de acceso a los baños, en el hueco de pared entre la Sala y la Barra: hoja de puerta,
+// marco y rótulo luminoso "WC" sobre la puerta, como el resto de rótulos del local.
+function RestroomEntrance({ position }: { position: [number, number, number] }) {
+  const anchoPuerta = 1.1;
+  return (
+    <group position={position}>
+      {/* Marco de la puerta, empotrado en el hueco de la pared del fondo */}
+      <mesh position={[0, 1.2, 0.13]} castShadow>
+        <boxGeometry args={[anchoPuerta + 0.16, 2.5, 0.14]} />
+        <meshStandardMaterial color="#e8e6e2" roughness={0.5} />
+      </mesh>
+      {/* Hoja de puerta */}
+      <mesh position={[0, 1.15, 0.16]} castShadow>
+        <boxGeometry args={[anchoPuerta - 0.06, 2.3, 0.06]} />
+        <meshStandardMaterial color="#3a2f2f" roughness={0.6} />
+      </mesh>
+      {/* Tirador */}
+      <mesh position={[anchoPuerta * 0.32, 1.15, 0.2]}>
+        <boxGeometry args={[0.03, 0.22, 0.03]} />
+        <meshStandardMaterial color="#c9a45c" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Rótulo luminoso "WC" sobre la puerta */}
+      <mesh position={[0, 2.55, 0.15]}>
+        <boxGeometry args={[0.62, 0.28, 0.04]} />
+        <meshStandardMaterial color="#171519" />
+      </mesh>
+      <Text
+        position={[0, 2.55, 0.18]}
+        fontSize={0.2}
+        color="#f6d998"
+        outlineWidth={0.01}
+        outlineColor="#171519"
+        anchorX="center"
+        anchorY="middle"
+      >
+        WC
+      </Text>
+      <pointLight position={[0, 2.55, 0.4]} intensity={2.4} distance={2.2} color="#f6d998" />
+      {/* Icono simple de "aseos" sobre la puerta */}
+      <Text
+        position={[0, 1.9, 0.18]}
+        fontSize={0.16}
+        color="#d5c5c1"
+        anchorX="center"
+        anchorY="middle"
+      >
+        Baños
+      </Text>
+    </group>
+  );
+}
+
+// Escalera decorativa de acceso a la entreplanta, en el hueco de paso entre la Sala y la Barra/Salón.
+function Staircase({ position }: { position: [number, number, number] }) {
+  const numPeldanos = 6;
+  const anchoEscalera = 1.1;
+  const huellaFondo = 0.32;
+  const alturaPeldano = 0.19;
+  return (
+    <group position={position}>
+      {Array.from({ length: numPeldanos }).map((_, i) => (
+        <mesh key={i} position={[0, alturaPeldano * (i + 0.5), -huellaFondo * i]} castShadow receiveShadow>
+          <boxGeometry args={[anchoEscalera, alturaPeldano, huellaFondo]} />
+          <meshStandardMaterial color={i % 2 === 0 ? "#6b5a4a" : "#5f4f41"} roughness={0.75} />
+        </mesh>
+      ))}
+      {/* Barandilla lateral */}
+      {[-1, 1].map((lado) => (
+        <group key={lado} position={[lado * (anchoEscalera / 2 + 0.03), 0, 0]}>
+          {Array.from({ length: numPeldanos }).map((_, i) => (
+            <mesh key={i} position={[0, alturaPeldano * (i + 1) + 0.35, -huellaFondo * i]}>
+              <cylinderGeometry args={[0.02, 0.02, 0.7, 8]} />
+              <meshStandardMaterial color="#171519" metalness={0.5} roughness={0.4} />
+            </mesh>
+          ))}
+          <mesh
+            position={[0, alturaPeldano * numPeldanos + 0.68, (-huellaFondo * (numPeldanos - 1)) / 2]}
+            rotation={[Math.atan2(alturaPeldano * numPeldanos, huellaFondo * numPeldanos), 0, 0]}
+          >
+            <cylinderGeometry
+              args={[0.025, 0.025, Math.hypot(alturaPeldano * numPeldanos, huellaFondo * numPeldanos) + 0.4, 8]}
+            />
+            <meshStandardMaterial color="#171519" metalness={0.5} roughness={0.4} />
+          </mesh>
+        </group>
+      ))}
+      <Text
+        position={[0, alturaPeldano * numPeldanos + 0.9, -huellaFondo * (numPeldanos - 1)]}
+        rotation={[0, Math.PI, 0]}
+        fontSize={0.16}
+        color="#d5c5c1"
+        anchorX="center"
+        anchorY="middle"
+      >
+        Entreplanta
+      </Text>
     </group>
   );
 }
