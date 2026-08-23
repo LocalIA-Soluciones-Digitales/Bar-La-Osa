@@ -261,7 +261,7 @@ export function ProductDetailModal({
               {producto.imagen_url ? (
                 <div
                   className={`relative mt-3 overflow-hidden rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "aspect-[9/16] w-2/3 self-center sm:w-48" : "aspect-[3/4] w-full"
+                    esBebidaLarga ? "aspect-[2/3] w-full max-w-[220px] self-center" : "aspect-[3/4] w-full"
                   }`}
                 >
                   <Image
@@ -269,13 +269,13 @@ export function ProductDetailModal({
                     alt={producto.nombre}
                     fill
                     sizes="(min-width: 768px) 380px, 90vw"
-                    className="object-contain"
+                    className="object-cover"
                   />
                 </div>
               ) : (
                 <div
                   className={`mt-3 rounded-xl bg-noche-surface-2 ${
-                    esBebidaLarga ? "aspect-[9/16] w-2/3 self-center sm:w-48" : "aspect-[3/4] w-full"
+                    esBebidaLarga ? "aspect-[2/3] w-full max-w-[220px] self-center" : "aspect-[3/4] w-full"
                   }`}
                 />
               )}

@@ -304,7 +304,6 @@ export function CategoryMenu({
                   const isHighlighted = highlighted === producto.id;
                   const tieneNutricion =
                     producto.ingredientes.length > 0 || producto.calorias != null;
-                  const esBebidaLarga = categoria.nombre === "Cócteles" || categoria.nombre === "Combinados";
 
                   return (
                     <div
@@ -339,17 +338,13 @@ export function CategoryMenu({
                       }`}
                     >
                       {producto.imagen_url ? (
-                        <div
-                          className={`relative shrink-0 overflow-hidden rounded-lg bg-noche-surface-2 ${
-                            esBebidaLarga ? "h-32 w-20" : "h-28 w-24"
-                          }`}
-                        >
+                        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-noche-surface-2">
                           <Image
                             src={producto.imagen_url}
                             alt={producto.nombre}
                             fill
-                            sizes="128px"
-                            className="object-contain transition-transform duration-300 group-hover:scale-105"
+                            sizes="112px"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                           {producto.destacado ? (
                             <>
@@ -361,7 +356,7 @@ export function CategoryMenu({
                           ) : null}
                         </div>
                       ) : (
-                        <div className={`shrink-0 rounded-lg bg-noche-surface-2 ${esBebidaLarga ? "h-32 w-20" : "h-28 w-24"}`} />
+                        <div className="h-28 w-28 shrink-0 rounded-lg bg-noche-surface-2" />
                       )}
 
                       <div className="flex min-w-0 flex-1 flex-col">
