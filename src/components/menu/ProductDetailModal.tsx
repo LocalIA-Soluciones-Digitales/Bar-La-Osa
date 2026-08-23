@@ -148,6 +148,8 @@ export function ProductDetailModal({
   const macros = useMemo(() => macroBreakdown(producto), [producto]);
   const tieneNutricion = producto.ingredientes.length > 0 || producto.calorias != null;
 
+  const esBebidaLarga = categoriaNombre === "Cócteles" || categoriaNombre === "Combinados";
+
   const goPrev = () => onNavigate((activeIndex - 1 + items.length) % items.length);
   const goNext = () => onNavigate((activeIndex + 1) % items.length);
 
@@ -243,23 +245,39 @@ export function ProductDetailModal({
           <div className="overflow-y-auto p-4 sm:p-5">
           <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
             <div className="flex min-w-0 flex-col">
-              <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-noche-primary px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-white">
-                <StarIcon className="h-3 w-3" />
-                {categoriaNombre}
-              </span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-noche-primary px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-white">
+                  <StarIcon className="h-3 w-3" />
+                  {categoriaNombre}
+                </span>
+                {producto.alcohol_pct != null ? (
+                  <span className="inline-flex w-fit items-center gap-1 rounded-full border border-noche-border bg-noche-surface-2 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-noche-ink-muted">
+                    <DropletIcon className="h-3 w-3" />
+                    {producto.alcohol_pct}% vol.
+                  </span>
+                ) : null}
+              </div>
 
               {producto.imagen_url ? (
-                <div className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-xl bg-noche-surface-2">
+                <div
+                  className={`relative mt-3 overflow-hidden rounded-xl bg-noche-surface-2 ${
+                    esBebidaLarga ? "aspect-[9/16] w-2/3 self-center sm:w-48" : "aspect-[3/4] w-full"
+                  }`}
+                >
                   <Image
                     src={producto.imagen_url}
                     alt={producto.nombre}
                     fill
                     sizes="(min-width: 768px) 380px, 90vw"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               ) : (
-                <div className="mt-3 aspect-[4/3] w-full rounded-xl bg-noche-surface-2" />
+                <div
+                  className={`mt-3 rounded-xl bg-noche-surface-2 ${
+                    esBebidaLarga ? "aspect-[9/16] w-2/3 self-center sm:w-48" : "aspect-[3/4] w-full"
+                  }`}
+                />
               )}
 
               <h2 className="mt-3 font-display text-xl text-noche-ink sm:text-2xl">{producto.nombre}</h2>

@@ -25,6 +25,7 @@ export interface Producto {
   grasas_saturadas_g: number | null;
   azucares_g: number | null;
   sal_g: number | null;
+  alcohol_pct: number | null;
 }
 
 export interface Mesa {
