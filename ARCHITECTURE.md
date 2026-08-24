@@ -563,6 +563,51 @@ impresión del navegador (ya operativo), solo que no automatizado del todo.
 
 Sigue pendiente (ver limitación conocida en §16.3): pulir el mensaje cuando el cambio de precio ocurre a mitad de un segundo intento de confirmación (caso muy raro, dos cambios de precio en segundos).
 
+## 19. TicketBAI / Batuz — scaffold (2026-08-24, **no activo**)
+
+Palomita Bar SL (Barakaldo, Bizkaia) está obligada a TicketBAI, pero hasta hoy el proyecto no
+tenía nada de esto (verificado por grep exhaustivo del repo antes de empezar). Se ha construido
+el módulo completo salvo dos piezas que dependen de recursos que el usuario todavía no tiene:
+certificado digital de la SL y confirmación del endpoint de envío a Batuz/LROE. Documentación
+completa en `src/lib/ticketbai/README.md` — resumen aquí:
+
+- **Basado en el documento oficial, no en memoria**: se descargó y leyó directamente el PDF
+  "Especificaciones funcionales y técnicas del sistema TicketBAI 1.2" (gipuzkoa.eus/batuz.eus).
+  El CRC-8 (`crc8.ts`), el identificativo TBAI de 39 caracteres (`identificador.ts`) y la URL
+  del QR fiscal de Bizkaia (`qr.ts`) están verificados byte a byte contra los dos ejemplos
+  numéricos que trae el propio documento (coinciden exactamente: `237` y `007`).
+- **Apagado por defecto**: `TICKETBAI_ENABLED` (no puesto en `.env.example`) hace que
+  `emitirFacturaTicketBai()` sea un no-op — el ticket se imprime exactamente igual que antes de
+  esta fase, sin identificativo ni QR.
+- **Lo que falta para operar de verdad**: certificado digital de Palomita Bar SL (firma
+  XAdES-BES, `src/lib/ticketbai/firma.ts` lanza un error a propósito hasta entonces — no tenía
+  sentido escribir una firma sin poder probarla), confirmar el endpoint de envío a Batuz/LROE
+  (`envio.ts`, no implementado), número de alta-inscripción del registro de software TBAI, y
+  validar el XML (`xml.ts`) contra el XSD real (descargable aparte, no obtenido para esta
+  implementación — el PDF leído da los campos en una tabla, no como esquema literal) y contra
+  el entorno de pruebas de Bizkaia.
+- **Efecto colateral corregido de paso**: `renderTicketCuentaHTML` aplicaba un 10% de IVA fijo
+  a toda la cuenta. En hostelería española las bebidas alcohólicas (toda la coctelería
+  incluida) van al 21%, no al 10%. Se usa `restaurant.productos.alcohol_pct` (ya existía) para
+  aplicar el tipo correcto por línea — corregido tanto en el ticket normal (`SalonBoard.tsx`,
+  `BarraPOS.tsx`) como en el futuro fichero TBAI.
+- **Esquema SQL preparado pero NO aplicado**: `supabase/ticketbai_2026-08-24.sql` (tabla
+  `restaurant.ticketbai_facturas` con numeración correlativa y encadenamiento atómico, RLS de
+  solo lectura, RPC `service_role`-only para mutar). A diferencia del resto de ficheros de esa
+  carpeta, se ha dejado sin ejecutar contra el proyecto Supabase compartido — revisar antes de
+  aplicarlo vía MCP.
+- **Idempotencia**: "Imprimir cuenta" en `/admin` es una vista previa que se puede pulsar varias
+  veces antes de liberar la mesa; TicketBAI prohíbe reemitir una factura ya generada, así que
+  un reintento reutiliza la factura existente y el ticket se marca `*** DUPLICADO ***`.
+
+**Manual, imprescindible antes de activar `TICKETBAI_ENABLED=true`:**
+1. Aplicar `supabase/ticketbai_2026-08-24.sql` (revisar primero).
+2. Certificado digital de Palomita Bar SL e implementar la firma real en `firma.ts`.
+3. Inscribirse en el registro de software TBAI de cualquiera de las tres Haciendas Forales y
+   rellenar `TICKETBAI_LICENCIA`/`TICKETBAI_ENTIDAD_DESARROLLADORA_NIF`.
+4. Confirmar y completar el envío a Batuz/LROE en `envio.ts`.
+5. Validar `xml.ts` contra el XSD real y contra el entorno de pruebas de Bizkaia.
+
 ## 18. Cocina y barra: aceptar/preparar por estación (2026-08-17)
 
 Hasta ahora un pedido mixto (comida + bebida) se aceptaba/preparaba como una sola unidad:

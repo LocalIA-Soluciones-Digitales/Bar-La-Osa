@@ -8,6 +8,7 @@ import { renderTicketComandaHTML, renderTicketCuentaHTML, imprimirTicketHTML } f
 import type { Categoria, Producto } from "@/lib/restaurant/types";
 import type { PedidoCocina } from "@/lib/restaurant/cocina-types";
 import { precioPorTarifa } from "@/lib/restaurant/precio-zona";
+import { tipoIvaProducto } from "@/lib/ticketbai/tipo-iva";
 import { ProductGridPicker } from "@/components/admin/ProductGridPicker";
 import { CheckIcon, PrinterIcon, TrashIcon } from "@/components/icons";
 
@@ -106,6 +107,7 @@ export function BarraPOS() {
         cantidad: l.cantidad,
         nombre: l.producto.nombre,
         precioUnitarioCentimos: precioPorTarifa(l.producto, "barra"),
+        tipoIva: tipoIvaProducto(l.producto.alcohol_pct),
       })),
     });
     imprimirTicketHTML(html);

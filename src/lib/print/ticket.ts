@@ -113,12 +113,23 @@ export function renderTicketComandaHTML(opts: TicketComandaOptions): string {
 // Cuenta (factura simplificada): con precios, IVA y total a pagar.
 // ------------------------------------------------------------------
 
-const IVA_PCT = 10;
-
+/**
+ * Tipo de IVA por línea: 21% para bebidas alcohólicas (incluida toda la coctelería), 10%
+ * para el resto (comida y bebidas sin alcohol) — ver src/lib/ticketbai/tipo-iva.ts, misma
+ * regla aplicada aquí y en el fichero TicketBAI para que ticket impreso y factura fiscal
+ * coincidan siempre.
+ */
 export interface TicketCuentaItem {
   cantidad: number;
   nombre: string;
   precioUnitarioCentimos: number;
+  tipoIva?: 10 | 21;
+}
+
+export interface TicketCuentaTicketBai {
+  identificativo: string;
+  qrDataUrl: string;
+  duplicado: boolean;
 }
 
 export interface TicketCuentaOptions {
@@ -126,6 +137,8 @@ export interface TicketCuentaOptions {
   mesaNombre?: string | null;
   camareroNombre?: string | null;
   items: TicketCuentaItem[];
+  /** Presente solo si TicketBAI está activo y la emisión salió bien; si no, la cuenta se imprime igual que hoy. */
+  ticketBai?: TicketCuentaTicketBai | null;
 }
 
 export function renderTicketCuentaHTML(opts: TicketCuentaOptions): string {
@@ -133,8 +146,20 @@ export function renderTicketCuentaHTML(opts: TicketCuentaOptions): string {
     (sum, item) => sum + item.precioUnitarioCentimos * item.cantidad,
     0,
   );
-  const baseCentimos = totalCentimos / (1 + IVA_PCT / 100);
-  const ivaCentimos = totalCentimos - baseCentimos;
+
+  const desgloseIva = new Map<number, number>();
+  for (const item of opts.items) {
+    const tipo = item.tipoIva ?? 10;
+    const importe = item.precioUnitarioCentimos * item.cantidad;
+    desgloseIva.set(tipo, (desgloseIva.get(tipo) ?? 0) + importe);
+  }
+  const filasIva = Array.from(desgloseIva.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([tipo, totalConIvaTipo]) => {
+      const baseCentimos = totalConIvaTipo / (1 + tipo / 100);
+      const ivaCentimos = totalConIvaTipo - baseCentimos;
+      return { tipo, baseCentimos, ivaCentimos };
+    });
 
   const filas = opts.items
     .map((item) => {
@@ -165,6 +190,10 @@ export function renderTicketCuentaHTML(opts: TicketCuentaOptions): string {
       .total-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-top: 8px; padding-top: 6px; border-top: 1.5px solid #000; }
       .pie { margin-top: 16px; font-size: 12px; text-align: center; }
       .gracias { margin-top: 6px; font-size: 12px; text-align: center; font-weight: bold; letter-spacing: 1px; }
+      .tbai { margin-top: 14px; text-align: center; }
+      .tbai .duplicado { font-size: 11px; font-weight: bold; letter-spacing: 1px; margin-bottom: 4px; }
+      .tbai .identificativo { font-size: 9px; font-family: "Courier New", monospace; word-break: break-all; }
+      .tbai img { width: 34mm; height: 34mm; margin-top: 4px; }
     </style></head>
     <body>
       ${encabezadoNegocioHTML()}
@@ -181,11 +210,25 @@ export function renderTicketCuentaHTML(opts: TicketCuentaOptions): string {
       </table>
       <hr />
       <table class="impuestos">
-        <tr><td>Base imponible</td><td class="num">${formatCentimos(baseCentimos)} €</td></tr>
-        <tr><td>IVA (${IVA_PCT}%)</td><td class="num">${formatCentimos(ivaCentimos)} €</td></tr>
+        ${filasIva
+          .map(
+            ({ tipo, baseCentimos, ivaCentimos }) => `
+        <tr><td>Base imponible (${tipo}%)</td><td class="num">${formatCentimos(baseCentimos)} €</td></tr>
+        <tr><td>IVA (${tipo}%)</td><td class="num">${formatCentimos(ivaCentimos)} €</td></tr>`,
+          )
+          .join("")}
       </table>
       <div class="total-row"><span>TOTAL A PAGAR</span><span>${formatCentimos(totalCentimos)} €</span></div>
       <div class="pie">IVA incluido conforme a la normativa vigente.</div>
+      ${
+        opts.ticketBai
+          ? `<div class="tbai">
+        ${opts.ticketBai.duplicado ? '<div class="duplicado">*** DUPLICADO ***</div>' : ""}
+        <div class="identificativo">${escapeHtml(opts.ticketBai.identificativo)}</div>
+        <img src="${opts.ticketBai.qrDataUrl}" alt="QR TicketBAI" />
+      </div>`
+          : ""
+      }
       <div class="gracias">¡GRACIAS POR SU VISITA!</div>
     </body></html>`;
 }

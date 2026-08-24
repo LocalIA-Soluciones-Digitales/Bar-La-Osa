@@ -40,6 +40,7 @@ import { prefijoZona } from "@/lib/restaurant/mesa-label";
 import { tarifaDeZona } from "@/lib/restaurant/precio-zona";
 import { esBloqueo } from "@/lib/restaurant/reserva-bloqueo";
 import { renderTicketComandaHTML, renderTicketCuentaHTML, imprimirTicketHTML } from "@/lib/print/ticket";
+import { tipoIvaProducto } from "@/lib/ticketbai/tipo-iva";
 import { PedidoRapidoForm } from "@/components/admin/PedidoRapidoForm";
 import { ReservaModal } from "@/components/admin/ReservaModal";
 import {
@@ -202,20 +203,47 @@ function nowHHMM(): string {
   });
 }
 
-function imprimirCuentaMesa(mesa: MesaEstadoAdmin, etiqueta: string) {
+async function imprimirCuentaMesa(mesa: MesaEstadoAdmin, etiqueta: string) {
   const items = mesa.pedidos_hoy
     .flatMap((p) => p.items)
     .map((item) => ({
       cantidad: item.cantidad,
       nombre: item.producto_nombre,
       precioUnitarioCentimos: item.precio_unitario_centimos,
+      tipoIva: tipoIvaProducto(item.alcohol_pct),
     }));
+
+  // Emisión TicketBAI: no-op (habilitado: false) mientras TICKETBAI_ENABLED no esté puesto a
+  // mano en el servidor — Palomita Bar SL todavía no tiene certificado digital. Si algo falla
+  // (red, servidor, etc.) el ticket se imprime igual que hoy, sin bloquear al camarero.
+  let ticketBai: Parameters<typeof renderTicketCuentaHTML>[0]["ticketBai"] = null;
+  try {
+    const pedidoIds = mesa.pedidos_hoy.map((p) => p.id);
+    const resp = await fetch("/api/ticketbai/emitir", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mesaId: mesa.id, pedidoIds }),
+    });
+    const resultado = await resp.json();
+    if (resultado.habilitado && resultado.identificativoTbai && resultado.qrUrl) {
+      ticketBai = {
+        identificativo: resultado.identificativoTbai,
+        qrDataUrl: await QRCode.toDataURL(resultado.qrUrl),
+        duplicado: Boolean(resultado.duplicado),
+      };
+    } else if (resultado.error) {
+      console.error("TicketBAI no emitido:", resultado.error);
+    }
+  } catch (err) {
+    console.error("Error llamando a /api/ticketbai/emitir", err);
+  }
 
   const html = renderTicketCuentaHTML({
     mesaEtiqueta: etiqueta,
     mesaNombre: mesa.nombre,
     camareroNombre: mesa.camarero_nombre,
     items,
+    ticketBai,
   });
 
   imprimirTicketHTML(html);

@@ -123,7 +123,10 @@ export interface PremioAdmin {
 }
 
 export interface PedidoMesaItemAdmin {
+  producto_id: string;
   producto_nombre: string;
+  /** > 0 implica bebida alcohólica → IVA al 21% en vez del 10% de hostelería. Ver src/lib/ticketbai/tipo-iva.ts. */
+  alcohol_pct: number | null;
   cantidad: number;
   precio_unitario_centimos: number;
   notas: string | null;
