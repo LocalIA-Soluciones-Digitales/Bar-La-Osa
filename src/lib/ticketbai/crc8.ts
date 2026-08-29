@@ -29,7 +29,7 @@ export function crc8(input: string): string {
   const bytes = new TextEncoder().encode(input);
   let crc = 0;
   for (const byte of bytes) {
-    crc = CRC8_TABLE[(crc ^ byte) & 0xff];
+    crc = CRC8_TABLE[(crc ^ byte) & 0xff] ?? 0;
   }
   return crc.toString(10).padStart(3, "0");
 }
