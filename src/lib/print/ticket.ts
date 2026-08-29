@@ -10,14 +10,15 @@ function escapeHtml(value: string): string {
 }
 
 const TICKET_BASE_STYLE = `
+  @page { size: 80mm auto; margin: 0; }
   * { box-sizing: border-box; }
-  body { font-family: "Courier New", monospace; width: 76mm; margin: 0; padding: 10px 8px; color: #000; }
+  body { font-family: "Courier New", monospace; width: 80mm; margin: 0; padding: 8px 6px; color: #000; }
   .centro { text-align: center; }
-  .negocio-nombre { font-size: 18px; font-weight: bold; letter-spacing: 0.5px; }
-  .negocio-datos { font-size: 11px; line-height: 1.4; margin-top: 2px; }
+  .negocio-nombre { font-size: 19px; font-weight: bold; letter-spacing: 0.5px; }
+  .negocio-datos { font-size: 12px; line-height: 1.4; margin-top: 2px; }
   hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
   hr.solida { border-top: 1px solid #000; }
-  @media print { body { width: 76mm; } }
+  @media print { body { width: 80mm; } }
 `;
 
 function encabezadoNegocioHTML(): string {
@@ -81,17 +82,17 @@ export function renderTicketComandaHTML(opts: TicketComandaOptions): string {
   return `<!doctype html><html><head><meta charset="utf-8"><title>Comanda ${escapeHtml(opts.mesaEtiqueta)}</title>
     <style>
       ${TICKET_BASE_STYLE}
-      .fecha { font-size: 11px; color: #333; }
-      .linea { font-size: 15px; font-weight: bold; margin-top: 3px; }
-      .sub { font-size: 12px; margin-top: 2px; }
-      .notas-generales { font-size: 12px; margin-top: 4px; background: #f0f0f0; padding: 3px 5px; }
-      .destino { font-size: 22px; font-weight: bold; text-align: center; margin: 10px 0 2px; letter-spacing: 2px; border: 2px solid #000; padding: 4px 0; }
-      .item { display: flex; align-items: flex-start; gap: 10px; font-size: 17px; font-weight: bold; margin: 7px 0 2px; }
+      .fecha { font-size: 12px; color: #333; }
+      .linea { font-size: 18px; font-weight: bold; margin-top: 3px; }
+      .sub { font-size: 13px; margin-top: 2px; }
+      .notas-generales { font-size: 13px; margin-top: 4px; background: #f0f0f0; padding: 3px 5px; }
+      .destino { font-size: 25px; font-weight: bold; text-align: center; margin: 10px 0 2px; letter-spacing: 2px; border: 2px solid #000; padding: 4px 0; }
+      .item { display: flex; align-items: flex-start; gap: 10px; font-size: 21px; font-weight: bold; margin: 8px 0 2px; }
       .item.primero { margin-top: 4px; }
-      .cant { min-width: 26px; height: 26px; line-height: 26px; text-align: center; border: 1.5px solid #000; border-radius: 4px; flex-shrink: 0; }
-      .nombre { padding-top: 2px; }
-      .nota { font-size: 12px; font-weight: normal; font-style: italic; margin: 0 0 4px 36px; }
-      .pie { margin-top: 14px; font-size: 10px; text-align: center; color: #555; }
+      .cant { min-width: 30px; height: 30px; line-height: 30px; text-align: center; border: 1.5px solid #000; border-radius: 4px; flex-shrink: 0; font-size: 19px; }
+      .nombre { padding-top: 3px; }
+      .nota { font-size: 14px; font-weight: normal; font-style: italic; margin: 0 0 5px 40px; }
+      .pie { margin-top: 14px; font-size: 11px; text-align: center; color: #555; }
     </style></head>
     <body>
       ${encabezadoNegocioHTML()}
