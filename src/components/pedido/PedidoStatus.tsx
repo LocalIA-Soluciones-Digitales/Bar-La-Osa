@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getPedidoPublico } from "@/lib/restaurant/queries";
 import { formatCentimos } from "@/lib/format";
-import { CheckIcon, RefreshIcon } from "@/components/icons";
+import { CheckIcon, ClockIcon, RefreshIcon } from "@/components/icons";
 import { StatusBadge } from "@/components/mesa/StatusBadge";
 import { guardarPedidoActivo, olvidarPedido } from "@/lib/pedido/active-orders";
 import { playNewOrderChime } from "@/lib/notify-sound";
 import { vibrarSuave } from "@/lib/haptics";
-import type { EstadoPedido, PedidoPublico } from "@/lib/restaurant/types";
+import type { EstadoPedido, PaymentStatus, PedidoPublico } from "@/lib/restaurant/types";
 
 const PASOS: { estado: EstadoPedido; label: string }[] = [
   { estado: "RECEIVED", label: "Pedido recibido" },
@@ -21,6 +21,29 @@ const PASOS: { estado: EstadoPedido; label: string }[] = [
 
 const ESTADOS_FINALES: EstadoPedido[] = ["DELIVERED", "CANCELLED"];
 const INTERVALO_MS = 5000;
+
+/** Badge del estado real del pago online: la confirmación solo llega por webhook de Stripe. */
+function PaymentStatusPill({ status }: { status: PaymentStatus }) {
+  switch (status) {
+    case "PAID":
+      return (
+        <StatusBadge icon={<CheckIcon className="h-3 w-3" />} label="Pago confirmado" variant="positive" />
+      );
+    case "FAILED":
+      return <StatusBadge icon={<ClockIcon className="h-3 w-3" />} label="Pago fallido" variant="danger" />;
+    case "REFUNDED":
+      return <StatusBadge label="Pago reembolsado" variant="neutral" />;
+    case "PENDING":
+    default:
+      return (
+        <StatusBadge
+          icon={<ClockIcon className="h-3 w-3" />}
+          label="Confirmando pago…"
+          variant="warning"
+        />
+      );
+  }
+}
 
 export function PedidoStatus({ pedidoInicial }: { pedidoInicial: PedidoPublico }) {
   const [pedido, setPedido] = useState(pedidoInicial);
@@ -72,11 +95,19 @@ export function PedidoStatus({ pedidoInicial }: { pedidoInicial: PedidoPublico }
       </h1>
 
       <div className="mt-4">
-        <StatusBadge
-          label={pedido.payment_method === "LOCAL" ? "Pago en local" : "Pago online"}
-          variant="neutral"
-        />
+        {pedido.payment_method === "LOCAL" ? (
+          <StatusBadge label="Pago en local" variant="neutral" />
+        ) : (
+          <PaymentStatusPill status={pedido.payment_status} />
+        )}
       </div>
+
+      {pedido.payment_method === "ONLINE" && pedido.payment_status === "PENDING" ? (
+        <p className="mt-3 text-sm text-noche-ink-muted">
+          Estamos confirmando tu pago con el banco. Esta página se actualiza sola en cuanto
+          se confirme, no hace falta que la recargues.
+        </p>
+      ) : null}
 
       {cancelado ? (
         <p className="mt-8 text-noche-ink-muted">Este pedido ha sido cancelado.</p>
