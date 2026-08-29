@@ -34,6 +34,29 @@ ni QR fiscal. **No poner `TICKETBAI_ENABLED=true` hasta que estén las dos cosas
    PDF leído da los campos como tabla en prosa, no como esquema literal) y contra el entorno
    de pruebas de Bizkaia antes de activar `TICKETBAI_ENABLED` en producción.
 
+## Verificación adicional: ticket real del TPV actual (2026-08-29)
+
+El usuario compartió una foto de un ticket real emitido por el TPV físico que Palomita Bar usa
+hoy, y de la página de comprobación de Batuz tras escanear su QR. Sirve como confirmación
+independiente (no solo contra el PDF oficial) de que este módulo replica el formato real:
+
+- Identificativo real: `TBAI-22756634C-290826-F0bEm8Y8NQGqP-128` — mismo NIF que
+  `SITE.nif`, misma estructura de 39 caracteres, mismo separador `-`, firma truncada a 13
+  caracteres y CRC de 3 dígitos, exactamente como en `identificador.ts`.
+- La página de Batuz (`batuz.eus/QRTBAI/...`) confirma por separado: `SERIE: FSE11`,
+  `NÚMERO FACTURA: 35403`, `IMPORTE: 1,95`, `FECHA EMISIÓN: 29/08/2026` — mismos campos que
+  genera `qr.ts`/`crear_factura_ticketbai`.
+- **Dato operativo importante**: el TPV actual factura con la serie `FSE11`. Por eso
+  `TICKETBAI_SERIE` tiene como valor por defecto `WEB` (antes era `A`) — tiene que ser distinta
+  de la que ya usa el TPV en producción para que, cuando convivan los dos sistemas, nunca
+  puedan chocar dos facturas con la misma serie+número del mismo NIF.
+- Discrepancias vistas en el ticket, sin resolver todavía (no se han tocado los datos públicos
+  del sitio sin confirmar): el ticket encabeza con **"Bar Palomita"** (orden invertido respecto
+  al nombre comercial "Palomita Bar" de `SITE.name`), y trae un teléfono de contacto
+  (`622598712`) distinto al que tiene la web (`+34 686 53 03 10`). Podría ser solo la
+  plantilla del TPV, o podría ser la razón social/teléfono real — confirmar antes de rellenar
+  `TICKETBAI_RAZON_SOCIAL` o de cambiar nada en `constants.ts`.
+
 ## Lo que sí está verificado contra el documento oficial
 
 - **CRC-8** (`crc8.ts`): tabla copiada del Anexo 3, verificada byte a byte contra los dos

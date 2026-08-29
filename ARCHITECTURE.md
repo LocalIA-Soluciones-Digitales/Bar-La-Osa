@@ -591,22 +591,36 @@ completa en `src/lib/ticketbai/README.md` — resumen aquí:
   incluida) van al 21%, no al 10%. Se usa `restaurant.productos.alcohol_pct` (ya existía) para
   aplicar el tipo correcto por línea — corregido tanto en el ticket normal (`SalonBoard.tsx`,
   `BarraPOS.tsx`) como en el futuro fichero TBAI.
-- **Esquema SQL preparado pero NO aplicado**: `supabase/ticketbai_2026-08-24.sql` (tabla
+- **Esquema SQL aplicado** (2026-08-27, revisado por el usuario antes de ejecutarlo él mismo
+  desde el SQL Editor de Supabase): `supabase/ticketbai_2026-08-24.sql` — tabla
   `restaurant.ticketbai_facturas` con numeración correlativa y encadenamiento atómico, RLS de
-  solo lectura, RPC `service_role`-only para mutar). A diferencia del resto de ficheros de esa
-  carpeta, se ha dejado sin ejecutar contra el proyecto Supabase compartido — revisar antes de
-  aplicarlo vía MCP.
+  solo lectura, RPC `service_role`-only para mutar. Verificado después con `list_tables` y
+  `get_advisors`: la tabla existe con RLS activo, y ninguna de las 5 funciones nuevas quedó
+  ejecutable por `anon`/`authenticated` (los avisos de seguridad que sí salen son todos
+  preexistentes, de antes de esta migración).
 - **Idempotencia**: "Imprimir cuenta" en `/admin` es una vista previa que se puede pulsar varias
   veces antes de liberar la mesa; TicketBAI prohíbe reemitir una factura ya generada, así que
   un reintento reutiliza la factura existente y el ticket se marca `*** DUPLICADO ***`.
+- **Convivencia con el TPV físico actual** (2026-08-29): Palomita Bar va a sustituir su TPV
+  actual (que ya usa TicketBAI) por este sistema, pero con un periodo en el que ambos
+  funcionarán en paralelo — incluso con capacidad de volver al TPV antiguo si el nuevo falla.
+  Esto no necesita ningún acoplamiento entre los dos sistemas: TicketBAI está diseñado para que
+  cada dispositivo/software mantenga su propia cadena de encadenamiento y su propia serie, así
+  que basta con que no compartan serie. El usuario compartió un ticket real del TPV actual (y
+  la comprobación de su QR en batuz.eus): confirma el formato exacto del identificativo TBAI
+  que ya genera `identificador.ts`, y revela que el TPV actual factura con la serie `FSE11` —
+  por eso `TICKETBAI_SERIE` pasó de `A` a `WEB` por defecto (ver
+  `src/lib/ticketbai/README.md`). El mismo ticket muestra dos discrepancias sin resolver
+  (razón social "Bar Palomita" vs. "Palomita Bar", teléfono `622598712` vs. el de la web) que
+  no se han tocado en `constants.ts` sin confirmación del usuario.
 
 **Manual, imprescindible antes de activar `TICKETBAI_ENABLED=true`:**
-1. Aplicar `supabase/ticketbai_2026-08-24.sql` (revisar primero).
-2. Certificado digital de Palomita Bar SL e implementar la firma real en `firma.ts`.
-3. Inscribirse en el registro de software TBAI de cualquiera de las tres Haciendas Forales y
+1. Certificado digital de Palomita Bar SL e implementar la firma real en `firma.ts`.
+2. Inscribirse en el registro de software TBAI de cualquiera de las tres Haciendas Forales y
    rellenar `TICKETBAI_LICENCIA`/`TICKETBAI_ENTIDAD_DESARROLLADORA_NIF`.
-4. Confirmar y completar el envío a Batuz/LROE en `envio.ts`.
-5. Validar `xml.ts` contra el XSD real y contra el entorno de pruebas de Bizkaia.
+3. Confirmar y completar el envío a Batuz/LROE en `envio.ts`.
+4. Validar `xml.ts` contra el XSD real y contra el entorno de pruebas de Bizkaia.
+5. Confirmar que ninguna otra serie en uso por el TPV actual coincide con `TICKETBAI_SERIE`.
 
 ## 18. Cocina y barra: aceptar/preparar por estación (2026-08-17)
 

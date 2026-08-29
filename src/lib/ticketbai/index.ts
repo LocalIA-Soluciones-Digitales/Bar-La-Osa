@@ -49,7 +49,9 @@ const SIN_EMITIR: ResultadoEmisionTicketBai = {
 
 function leerConfiguracion() {
   return {
-    serie: process.env.TICKETBAI_SERIE ?? "A",
+    // "WEB" por defecto — confirmado que el TPV físico actual usa la serie "FSE11", así que
+    // este sistema necesita una distinta (ver .env.example para el porqué).
+    serie: process.env.TICKETBAI_SERIE ?? "WEB",
     licenciaTbai: process.env.TICKETBAI_LICENCIA ?? "",
     nifEntidadDesarrolladora: process.env.TICKETBAI_ENTIDAD_DESARROLLADORA_NIF ?? "",
     softwareNombre: process.env.TICKETBAI_SOFTWARE_NOMBRE ?? "Palomita Bar TPV",
