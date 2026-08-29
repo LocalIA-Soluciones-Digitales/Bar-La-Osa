@@ -254,6 +254,17 @@ export function imprimirTicketHTML(html: string): void {
   marco.document.write(html);
   marco.document.close();
 
+  // "size: 80mm auto" del @page (TICKET_BASE_STYLE) no lo respeta de forma fiable el driver
+  // de la impresora térmica: en vez de cortar al final del contenido, mide como un folio largo
+  // fijo y deja un hueco en blanco enorme antes de cortar. Se mide el alto real ya renderizado
+  // y se fija explícito en mm (con un pequeño margen de seguridad) justo antes de imprimir, así
+  // el corte queda pegado al contenido sin depender de que el driver soporte "auto".
+  const altoPx = marco.document.documentElement.scrollHeight;
+  const altoMm = (altoPx * 25.4) / 96 + 4;
+  const ajustePagina = marco.document.createElement("style");
+  ajustePagina.textContent = `@page { size: 80mm ${altoMm.toFixed(1)}mm; margin: 0; }`;
+  marco.document.head.appendChild(ajustePagina);
+
   const limpiar = () => document.body.removeChild(iframe);
   marco.onafterprint = limpiar;
   // Fallback por si el navegador no dispara onafterprint (imprime "en bruto" con --kiosk-printing).
