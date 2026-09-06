@@ -2,9 +2,12 @@ import { crc8 } from "@/lib/ticketbai/crc8";
 
 /**
  * URL de la aplicación web de comprobación del QR TBAI, específica por Hacienda Foral
- * (sección 4.3.3). Palomita Bar está en Barakaldo (Bizkaia), así que se usa siempre la de
- * Bizkaia. La barra final es intencionada: el documento indica que forma parte de la cadena
- * sobre la que se calcula el CRC.
+ * (sección 4.3.3). Se usa siempre la de Bizkaia. La barra final es intencionada: el documento
+ * indica que forma parte de la cadena sobre la que se calcula el CRC.
+ *
+ * NOTA: todo este módulo TicketBAI/Batuz es específico del sistema fiscal del País Vasco
+ * (Álava/Gipuzkoa/Bizkaia). No es aplicable, tal cual, a un negocio en Mallorca (Illes
+ * Balears), que tiene un sistema fiscal distinto — no lo actives pensando que aplica.
  */
 const QR_BASE_URL_BIZKAIA = "https://batuz.eus/QRTBAI/";
 

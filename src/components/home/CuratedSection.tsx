@@ -31,15 +31,15 @@ export function CuratedSection({
         <div className="mx-auto max-w-2xl text-center">
           <p className="flex items-center justify-center gap-3 text-xs uppercase tracking-widest2 text-noche-primary">
             <span className="h-px w-6 bg-noche-primary/50" />
-            La esencia
+            Experiencia gastronómica
             <span className="h-px w-6 bg-noche-primary/50" />
           </p>
-          <h2 className="mt-4 font-display text-4xl text-noche-ink">
-            Una selección de Palomita Bar
+          <h2 className="mt-4 font-display text-4xl italic text-noche-ink">
+            Sabores para compartir
           </h2>
           <p className="mt-4 text-noche-ink/70">
-            Un aperitivo de nuestra carta: coctelería artesanal y picoteo elegido con esmero
-            para compartir. Descubre el resto en la carta completa.
+            Un aperitivo de nuestra carta: tapas, raciones y platos de la casa elegidos con
+            esmero. Descubre el resto en la carta completa.
           </p>
         </div>
 

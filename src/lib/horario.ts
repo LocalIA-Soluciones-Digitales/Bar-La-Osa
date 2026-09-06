@@ -26,15 +26,19 @@ export const DIAS_SEMANA = [
 
 const MARCA_JSON = "hjson:";
 
+// Horario "aproximado" de La Osa (ver SITE.hoursNote en src/lib/constants.ts):
+// viernes a miércoles 7:30-23:00, cerrado los jueves. Este es el horario de
+// referencia mientras no haya un tenant conectado que sirva uno editable
+// desde /admin/configuracion.
 export function semanaPorDefecto(): SemanaHorario {
   const base: Record<string, DiaHorario> = {
-    Lunes: { abierto: true, desde: "09:00", hasta: "23:30" },
-    Martes: { abierto: true, desde: "09:00", hasta: "23:30" },
-    Miércoles: { abierto: true, desde: "09:00", hasta: "23:30" },
-    Jueves: { abierto: true, desde: "09:00", hasta: "23:30" },
-    Viernes: { abierto: true, desde: "09:00", hasta: "03:00" },
-    Sábado: { abierto: true, desde: "10:00", hasta: "03:00" },
-    Domingo: { abierto: true, desde: "10:00", hasta: "23:00" },
+    Lunes: { abierto: true, desde: "07:30", hasta: "23:00" },
+    Martes: { abierto: true, desde: "07:30", hasta: "23:00" },
+    Miércoles: { abierto: true, desde: "07:30", hasta: "23:00" },
+    Jueves: { abierto: false, desde: "07:30", hasta: "23:00" },
+    Viernes: { abierto: true, desde: "07:30", hasta: "23:00" },
+    Sábado: { abierto: true, desde: "07:30", hasta: "23:00" },
+    Domingo: { abierto: true, desde: "07:30", hasta: "23:00" },
   };
   return DIAS_SEMANA.map((dia) => base[dia]!) as SemanaHorario;
 }

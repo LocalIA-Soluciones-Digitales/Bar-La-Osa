@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import { SITE } from "@/lib/constants";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
+const display = Playfair_Display({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   style: ["normal", "italic"],
@@ -17,18 +17,42 @@ const sans = Inter({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
+const DESCRIPTION =
+  "Bar de Tapas La Osa: tapas españolas, raciones, frituras y menú diario en el corazón de Port d'Alcúdia, Mallorca. Terraza, reservas y comida para llevar.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${SITE.name} — ${SITE.tagline}`,
     template: `%s — ${SITE.name}`,
   },
-  description:
-    "Palomita Bar: coctelería y picoteo con influencia japonesa en Barakaldo. Cócteles, rolls, gyozas, croquetas y tartar en Gernikako Arbola Etorbidea 6A.",
+  description: DESCRIPTION,
+  keywords: [
+    "tapas Mallorca",
+    "restaurante Alcúdia",
+    "bar de tapas Port d'Alcúdia",
+    "gastronomía mediterránea Mallorca",
+    "terraza Alcúdia",
+    "reservar mesa Alcúdia",
+  ],
+  authors: [{ name: SITE.name }],
   openGraph: {
-    title: SITE.name,
-    description: SITE.tagline,
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: DESCRIPTION,
+    siteName: SITE.name,
     locale: "es_ES",
     type: "website",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: DESCRIPTION,
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
   },
 };
 

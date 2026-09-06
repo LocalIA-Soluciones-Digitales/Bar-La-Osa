@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
-// "/historia" no es una ruta propia: es la sección #nosotros de la portada
-// (ver NAV_LINKS en src/lib/constants.ts), ya cubierta por "".
-const routes = ["", "/carta", "/cocteleria", "/galeria", "/reservar"];
+// "/#esencia" y "/#contacto" no son rutas propias: son secciones de la
+// portada (ver NAV_LINKS en src/lib/constants.ts), ya cubiertas por "".
+const routes = ["", "/carta", "/bebidas", "/galeria", "/reservar", "/opiniones"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://palomitabar.es";
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
 
   return routes.map((route) => ({
     url: `${base}${route}`,

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function MesasAdminPage() {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.rpc("get_mesas_estado_admin", {
-    p_cliente_id: process.env.NEXT_PUBLIC_PALOMITA_CLIENTE_ID,
+    p_cliente_id: process.env.NEXT_PUBLIC_LAOSA_CLIENTE_ID,
   });
 
   const mesasIniciales = error ? [] : ((data as unknown as MesaEstadoAdmin[]) ?? []);

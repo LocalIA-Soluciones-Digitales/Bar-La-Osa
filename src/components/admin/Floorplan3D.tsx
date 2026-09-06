@@ -690,7 +690,7 @@ function MesaUnida({
 const PUERTA_X = 5;
 const PUERTA_ANCHO = 1.8;
 
-// Logo de neón "Palomita": aro rosa + texto, como el cartel neón real del local.
+// Rótulo de neón estilizado (elemento decorativo, no reproduce un rótulo real): aro rosa + texto.
 function NeonLogo({
   position,
   rotation = [0, 0, 0],
@@ -715,7 +715,7 @@ function NeonLogo({
         anchorX="center"
         anchorY="middle"
       >
-        Palomita
+        La Osa
       </Text>
       <Text
         position={[0, -0.18, 0.03]}
@@ -890,9 +890,9 @@ function Architecture({ focusZona }: { focusZona: PrefijoZona | null }) {
         <VentanaPersiana position={[-1.55, 0, -0.02]} />
         <VentanaPersiana position={[1.55, 0, -0.02]} />
 
-        {/* Cartel "Palomita Bar" en cursiva sobre la puerta, como el rótulo metálico real */}
+        {/* Rótulo "La Osa" en cursiva sobre la puerta (elemento decorativo, no reproduce un rótulo real) */}
         <Text position={[0, 2.75, 0.02]} fontSize={0.32} color="#1c1a1c" anchorX="center" anchorY="middle">
-          Palomita Bar
+          La Osa
         </Text>
 
         {/* Maceta con planta junto a la puerta, como el ficus real de la entrada */}
@@ -1029,7 +1029,7 @@ function AwningTerraza({ position, width }: { position: [number, number, number]
         anchorX="center"
         anchorY="middle"
       >
-        Palomita
+        La Osa
       </Text>
       {/* Postes de soporte del toldo */}
       {[-width / 2 + 0.3, 0, width / 2 - 0.3].map((x, i) => (

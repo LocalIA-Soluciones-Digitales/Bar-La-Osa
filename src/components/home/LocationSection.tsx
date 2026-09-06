@@ -47,29 +47,37 @@ export function LocationSection({ horario }: { horario: string | null }) {
               </span>
             </p>
 
-            <p className="mt-8 text-sm font-medium text-noche-primary">Contacto</p>
-            <div className="mt-3 space-y-2 text-noche-ink/80">
-              <p>
-                <a
-                  href={SITE.phoneHref}
-                  className="inline-flex items-center gap-2 transition-colors hover:text-noche-primary"
-                >
-                  <PhoneIcon className="h-4 w-4 text-noche-primary" />
-                  {SITE.phone}
-                </a>
-              </p>
-              <p>
-                <a
-                  href={SITE.instagram.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 transition-colors hover:text-noche-primary"
-                >
-                  <InstagramIcon className="h-4 w-4 text-noche-primary" />
-                  {SITE.instagram.handle}
-                </a>
-              </p>
-            </div>
+            {SITE.phone || SITE.instagram ? (
+              <>
+                <p className="mt-8 text-sm font-medium text-noche-primary">Contacto</p>
+                <div className="mt-3 space-y-2 text-noche-ink/80">
+                  {SITE.phone ? (
+                    <p>
+                      <a
+                        href={SITE.phoneHref ?? undefined}
+                        className="inline-flex items-center gap-2 transition-colors hover:text-noche-primary"
+                      >
+                        <PhoneIcon className="h-4 w-4 text-noche-primary" />
+                        {SITE.phone}
+                      </a>
+                    </p>
+                  ) : null}
+                  {SITE.instagram ? (
+                    <p>
+                      <a
+                        href={SITE.instagram.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 transition-colors hover:text-noche-primary"
+                      >
+                        <InstagramIcon className="h-4 w-4 text-noche-primary" />
+                        {SITE.instagram.handle}
+                      </a>
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : null}
 
             <p className="mt-8 text-sm font-medium text-noche-primary">Horario</p>
             <p className="mt-3 flex items-start gap-2 whitespace-pre-line text-noche-ink/80">
@@ -87,13 +95,15 @@ export function LocationSection({ horario }: { horario: string | null }) {
                 <MapPinIcon className="h-4 w-4" />
                 Cómo llegar
               </a>
-              <a
-                href={SITE.phoneHref}
-                className="inline-flex items-center gap-2 rounded-full border border-noche-ink/30 px-6 py-3 text-sm font-medium text-noche-ink transition-colors hover:border-noche-primary hover:text-noche-primary"
-              >
-                <PhoneIcon className="h-4 w-4" />
-                Llamar
-              </a>
+              {SITE.phone ? (
+                <a
+                  href={SITE.phoneHref ?? undefined}
+                  className="inline-flex items-center gap-2 rounded-full border border-noche-ink/30 px-6 py-3 text-sm font-medium text-noche-ink transition-colors hover:border-noche-primary hover:text-noche-primary"
+                >
+                  <PhoneIcon className="h-4 w-4" />
+                  Llamar
+                </a>
+              ) : null}
             </div>
 
             <a
@@ -108,7 +118,7 @@ export function LocationSection({ horario }: { horario: string | null }) {
 
           <div className="h-72 overflow-hidden rounded-lg border border-noche-border lg:h-[420px]">
             <iframe
-              title="Ubicación de Palomita Bar"
+              title={`Ubicación de ${SITE.name}`}
               src={mapsEmbedUrl}
               loading="lazy"
               className="h-full w-full"

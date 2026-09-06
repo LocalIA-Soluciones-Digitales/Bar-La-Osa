@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { getCarta, getCategorias } from "@/lib/restaurant/queries";
+import { CATEGORIAS, PRODUCTOS } from "@/lib/restaurant/static-content";
 import { CategoryMenu } from "@/components/menu/CategoryMenu";
 import { buildMenuJsonLd } from "@/lib/restaurant/menu-jsonld";
-
-export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Carta",
   description:
-    "Carta de picoteo de Palomita Bar en Barakaldo: rolls, gyozas, tartar, tablas y postres.",
+    "Carta de Bar de Tapas La Osa en Port d'Alcúdia: tapas para compartir, raciones, frituras, hamburguesas gourmet, bocadillos, desayunos, brunch y menú diario.",
 };
 
 export default async function CartaPage({
@@ -16,13 +14,9 @@ export default async function CartaPage({
 }: {
   searchParams: Promise<{ product?: string }>;
 }) {
-  const [{ product }, categorias, productos] = await Promise.all([
-    searchParams,
-    getCategorias(),
-    getCarta(),
-  ]);
-  const picoteo = categorias.filter((categoria) => categoria.tipo === "comida");
-  const menuJsonLd = buildMenuJsonLd(picoteo, productos, "Carta de picoteo — Palomita Bar");
+  const { product } = await searchParams;
+  const comida = CATEGORIAS.filter((categoria) => categoria.tipo === "comida");
+  const menuJsonLd = buildMenuJsonLd(comida, PRODUCTOS, "Carta — Bar de Tapas La Osa");
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-24">
@@ -31,18 +25,18 @@ export default async function CartaPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(menuJsonLd) }}
       />
       <p className="text-xs uppercase tracking-widest2 text-noche-primary">Carta</p>
-      <h1 className="mt-4 font-display text-5xl text-noche-ink">Picoteo</h1>
+      <h1 className="mt-4 font-display text-5xl italic text-noche-ink">Nuestra carta</h1>
       <p className="mt-4 max-w-lg text-noche-ink-muted">
-        Carta completa de picoteo. Para pedir desde la mesa, escanea el código
-        QR que tienes en ella. ¿Buscas los cócteles? Están en{" "}
-        <a href="/cocteleria" className="underline underline-offset-2 hover:text-noche-primary">
-          Coctelería
+        Tapas para compartir, raciones y platos de la casa con producto de mercado. ¿Buscas
+        bebidas, cervezas o vino? Están en{" "}
+        <a href="/bebidas" className="underline underline-offset-2 hover:text-noche-primary">
+          Bebidas
         </a>
         .
       </p>
 
       <div className="mt-8">
-        <CategoryMenu categorias={picoteo} productos={productos} highlightProductId={product} />
+        <CategoryMenu categorias={comida} productos={PRODUCTOS} highlightProductId={product} />
       </div>
     </div>
   );

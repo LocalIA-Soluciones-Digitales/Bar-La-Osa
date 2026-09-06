@@ -3,14 +3,14 @@ import { ReservaForm } from "@/components/reservas/ReservaForm";
 
 export const metadata: Metadata = {
   title: "Reservar mesa",
-  description: "Reserva mesa en Palomita Bar, coctelería y picoteo en Barakaldo.",
+  description: "Reserva mesa en Bar de Tapas La Osa, Port d'Alcúdia, Mallorca.",
 };
 
 export default function ReservarPage() {
   return (
     <div className="mx-auto max-w-lg px-6 py-24">
       <p className="text-xs uppercase tracking-widest2 text-noche-primary">Reservas</p>
-      <h1 className="mt-4 font-display text-5xl text-noche-ink">Resérvanos tu mesa</h1>
+      <h1 className="mt-4 font-display text-5xl italic text-noche-ink">Resérvanos tu mesa</h1>
       <p className="mt-4 text-noche-ink-muted">
         Déjanos tus datos y te confirmamos la mesa. Para grupos grandes o eventos, mejor llámanos
         directamente.

@@ -22,14 +22,16 @@ const TICKET_BASE_STYLE = `
 `;
 
 function encabezadoNegocioHTML(): string {
+  // Sin NIF confirmado todavía para La Osa: se omite la línea en vez de
+  // imprimir un dato fiscal inventado (este ticket no es una factura
+  // TicketBAI real mientras TICKETBAI_ENABLED sea false).
   return `
     <div class="centro">
       <div class="negocio-nombre">${escapeHtml(SITE.name)}</div>
       <div class="negocio-datos">
-        NIF: ${escapeHtml(SITE.nif)}<br />
         ${escapeHtml(SITE.address.line1)}<br />
-        ${escapeHtml(SITE.address.postalCode)} · ${escapeHtml(SITE.address.city)}<br />
-        ${escapeHtml(SITE.phone)}
+        ${escapeHtml(SITE.address.postalCode)} · ${escapeHtml(SITE.address.city)}
+        ${SITE.phone ? `<br />${escapeHtml(SITE.phone)}` : ""}
       </div>
     </div>`;
 }

@@ -12,13 +12,13 @@ import type {
 // is_developer() OR mi_cliente_id() (resenas). Filtramos por cliente_id
 // igualmente para no depender solo de RLS, siguiendo el mismo patrón que
 // admin-queries.ts.
-const PALOMITA_CLIENTE_ID = process.env.NEXT_PUBLIC_PALOMITA_CLIENTE_ID;
+const LAOSA_CLIENTE_ID = process.env.NEXT_PUBLIC_LAOSA_CLIENTE_ID;
 
 function clienteId(): string {
-  if (!PALOMITA_CLIENTE_ID) {
-    throw new Error("Falta NEXT_PUBLIC_PALOMITA_CLIENTE_ID en las variables de entorno.");
+  if (!LAOSA_CLIENTE_ID) {
+    throw new Error("Falta NEXT_PUBLIC_LAOSA_CLIENTE_ID en las variables de entorno.");
   }
-  return PALOMITA_CLIENTE_ID;
+  return LAOSA_CLIENTE_ID;
 }
 
 export async function getVisitasAdmin(desde: Date, hasta: Date): Promise<VisitaAdmin[]> {

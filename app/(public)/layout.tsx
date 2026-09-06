@@ -2,8 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ActiveOrderBanner } from "@/components/pedido/ActiveOrderBanner";
 import { SITE } from "@/lib/constants";
-import { getHorarioPublico } from "@/lib/restaurant/queries";
-import { DIAS_SEMANA, parseHorario, semanaPorDefecto } from "@/lib/horario";
+import { DIAS_SEMANA, semanaPorDefecto } from "@/lib/horario";
 
 const DIA_SCHEMA_ORG: Record<(typeof DIAS_SEMANA)[number], string> = {
   Lunes: "Monday",
@@ -18,20 +17,19 @@ const DIA_SCHEMA_ORG: Record<(typeof DIAS_SEMANA)[number], string> = {
 // Script inline mínimo (sin dependencia de props ni datos de usuario) que
 // aplica el tema guardado antes del primer paint, para que el toggle de
 // ThemeToggle no provoque un parpadeo del tema oscuro al cargar la página.
-const THEME_INIT_SCRIPT = `try{if(localStorage.getItem("palomita.tema")==="dia"){document.documentElement.setAttribute("data-theme","dia")}}catch(e){}`;
+const THEME_INIT_SCRIPT = `try{if(localStorage.getItem("laosa.tema")==="dia"){document.documentElement.setAttribute("data-theme","dia")}}catch(e){}`;
 
-export default async function PublicLayout({
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
+
+export default function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  let semana = semanaPorDefecto();
-  try {
-    const horario = await getHorarioPublico();
-    semana = parseHorario(horario) ?? semanaPorDefecto();
-  } catch {
-    // Si la RPC falla, se mantiene el horario habitual publicado por defecto.
-  }
+  // Horario de referencia (ver src/lib/horario.ts): mientras no haya un
+  // tenant conectado, se usa el mismo horario aproximado en todas partes
+  // (JSON-LD, LocationSection, ReservaForm) en vez de una RPC en vivo.
+  const semana = semanaPorDefecto();
 
   const openingHoursSpecification = semana
     .map((dia, index) => ({ dia, nombre: DIAS_SEMANA[index]! }))
@@ -45,9 +43,10 @@ export default async function PublicLayout({
 
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "BarOrPub",
+    "@type": "Restaurant",
     name: SITE.name,
-    servesCuisine: ["Cocktails", "Tapas", "Japanese-influenced"],
+    servesCuisine: ["Spanish", "Mediterranean", "Tapas"],
+    priceRange: "€€",
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.line1,
@@ -56,9 +55,9 @@ export default async function PublicLayout({
       addressRegion: SITE.address.province,
       addressCountry: "ES",
     },
-    telephone: SITE.phone,
-    sameAs: [SITE.instagram.url],
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://palomitabar.es",
+    ...(SITE.phone ? { telephone: SITE.phone } : {}),
+    ...(SITE.instagram ? { sameAs: [SITE.instagram.url] } : {}),
+    url: SITE_URL,
     openingHoursSpecification,
   };
 

@@ -17,13 +17,13 @@ import type {
 import type { EstadoPedido, SiteImages } from "@/lib/restaurant/types";
 import type { PedidoCocina } from "@/lib/restaurant/cocina-types";
 
-const PALOMITA_CLIENTE_ID = process.env.NEXT_PUBLIC_PALOMITA_CLIENTE_ID;
+const LAOSA_CLIENTE_ID = process.env.NEXT_PUBLIC_LAOSA_CLIENTE_ID;
 
 function clienteId(): string {
-  if (!PALOMITA_CLIENTE_ID) {
-    throw new Error("Falta NEXT_PUBLIC_PALOMITA_CLIENTE_ID en las variables de entorno.");
+  if (!LAOSA_CLIENTE_ID) {
+    throw new Error("Falta NEXT_PUBLIC_LAOSA_CLIENTE_ID en las variables de entorno.");
   }
-  return PALOMITA_CLIENTE_ID;
+  return LAOSA_CLIENTE_ID;
 }
 
 export async function getCategoriasAdmin(): Promise<CategoriaAdmin[]> {
@@ -106,13 +106,14 @@ export async function subirImagenProducto(file: File): Promise<string> {
   const extension = file.name.split(".").pop() ?? "jpg";
   const path = `carta/${crypto.randomUUID()}.${extension}`;
 
-  const { error } = await supabase.storage.from("palomita-bar").upload(path, file, {
+  // TODO: crear el bucket "la-osa" en Supabase Storage antes de subir imágenes reales.
+  const { error } = await supabase.storage.from("la-osa").upload(path, file, {
     cacheControl: "3600",
     upsert: false,
   });
   if (error) throw error;
 
-  const { data } = supabase.storage.from("palomita-bar").getPublicUrl(path);
+  const { data } = supabase.storage.from("la-osa").getPublicUrl(path);
   return data.publicUrl;
 }
 
@@ -614,12 +615,12 @@ export async function subirImagenSitio(file: File, carpeta: string): Promise<str
   const extension = file.name.split(".").pop() ?? "jpg";
   const path = `site/${carpeta}-${crypto.randomUUID()}.${extension}`;
 
-  const { error } = await supabase.storage.from("palomita-bar").upload(path, file, {
+  const { error } = await supabase.storage.from("la-osa").upload(path, file, {
     cacheControl: "3600",
     upsert: false,
   });
   if (error) throw error;
 
-  const { data } = supabase.storage.from("palomita-bar").getPublicUrl(path);
+  const { data } = supabase.storage.from("la-osa").getPublicUrl(path);
   return data.publicUrl;
 }

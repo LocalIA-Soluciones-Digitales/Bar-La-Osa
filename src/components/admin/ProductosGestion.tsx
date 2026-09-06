@@ -72,7 +72,7 @@ export function ProductosGestion() {
     const resultado = (["comida", "bebida"] as const)
       .map((tipo) => ({
         tipo,
-        titulo: tipo === "comida" ? "Carta" : "Coctelería",
+        titulo: tipo === "comida" ? "Carta" : "Bebidas",
         grupos: gruposPorTipo(tipo),
       }))
       .filter((s) => s.grupos.length > 0);

@@ -12,58 +12,61 @@
   }
 
   :root {
-    /* Paleta oscura magenta/púrpura, ahora compartida por la web pública y
-       por /admin + /cocina (panel de empleados). Tríos "L C H" de OKLCH
-       (sin oklch(...) alrededor) para poder aplicar opacidad con clases
-       tipo bg-noche-surface/60 vía <alpha-value>. */
-    --noche-bg: 0.15 0.028 300;
-    --noche-surface: 0.21 0.032 300;
-    --noche-surface-2: 0.27 0.038 300;
-    --noche-surface-3: 0.32 0.042 300;
-    --noche-primary: 0.62 0.21 340;
-    --noche-primary-dark: 0.5 0.2 340;
-    --noche-accent: 0.58 0.16 295;
-    --noche-positive: 0.72 0.17 150;
-    --noche-warning: 0.75 0.15 80;
-    --noche-danger: 0.62 0.19 25;
-    --noche-ink: 0.97 0.01 300;
-    --noche-ink-muted: 0.72 0.02 300;
-    --noche-ink-faint: 0.55 0.02 300;
-    --noche-border: 0.32 0.03 300;
+    /* Identidad "Mediterranean Luxury": piedra caliza, oro envejecido y
+       terracota de Mallorca, compartida por la web pública y por /admin +
+       /cocina (panel de empleados). Tríos "L C H" de OKLCH (sin oklch(...)
+       alrededor) para poder aplicar opacidad con clases tipo
+       bg-noche-surface/60 vía <alpha-value>. Los nombres de variable
+       (--noche-*) son herencia de la arquitectura original y se mantienen
+       tal cual para no tocar ni un componente: solo cambian los valores. */
+    --noche-bg: 0.17 0.014 75;
+    --noche-surface: 0.22 0.016 72;
+    --noche-surface-2: 0.28 0.018 70;
+    --noche-surface-3: 0.34 0.02 68;
+    --noche-primary: 0.72 0.1 78;
+    --noche-primary-dark: 0.6 0.105 76;
+    --noche-accent: 0.52 0.15 35;
+    --noche-positive: 0.68 0.13 155;
+    --noche-warning: 0.78 0.13 85;
+    --noche-danger: 0.58 0.19 24;
+    --noche-ink: 0.98 0.004 90;
+    --noche-ink-muted: 0.76 0.02 78;
+    --noche-ink-faint: 0.55 0.018 76;
+    --noche-border: 0.34 0.02 72;
 
-    /* Velo del hero (foto de portada): siempre oscuro, en modo noche y en
-       modo día por igual. La foto de portada es fotografía de ambiente
-       oscura; un velo claro la deja sin oscurecer lo suficiente para que
-       el texto (blanco fijo, ver HeroSection) se lea bien encima. Por eso
-       estas variables NO se sobrescriben en el bloque "Modo día" de abajo. */
-    --hero-scrim-a: rgb(0 0 0 / 0.75);
-    --hero-scrim-b: rgb(0 0 0 / 0.35);
-    --hero-scrim-c: rgb(0 0 0 / 0.1);
-    --hero-vignette: rgb(0 0 0 / 0.2);
+    /* Velo del hero (foto/lienzo de portada): siempre oscuro, en modo
+       "atardecer" y en modo "día" por igual, para que el texto (blanco
+       fijo, ver HeroSection) se lea bien encima. Por eso estas variables
+       NO se sobrescriben en el bloque "Modo día" de abajo. */
+    --hero-scrim-a: rgb(18 12 6 / 0.8);
+    --hero-scrim-b: rgb(18 12 6 / 0.4);
+    --hero-scrim-c: rgb(18 12 6 / 0.12);
+    --hero-vignette: rgb(18 12 6 / 0.22);
   }
 
-  /* "Modo día": mismas variables --noche-*, valores invertidos para uso a
-     pleno sol (terraza, pedido en mesa de día). Activado por ThemeToggle
-     vía data-theme="dia" en <html>; ningún componente necesita saberlo,
-     todos leen las mismas clases bg-noche-* y text-noche-*. */
+  /* "Modo día": mismas variables --noche-*, invertidas para lectura a pleno
+     sol (terraza, carta al mediodía) — piedra caliza clara en vez de noche
+     mediterránea. Activado por ThemeToggle vía data-theme="dia" en <html>;
+     ningún componente necesita saberlo, todos leen las mismas clases
+     bg-noche-* y text-noche-*. */
   :root[data-theme="dia"] {
-    --noche-bg: 0.97 0.012 85;
-    --noche-surface: 0.995 0.006 85;
-    --noche-surface-2: 0.93 0.016 82;
-    --noche-surface-3: 0.88 0.02 80;
-    --noche-primary: 0.48 0.19 340;
-    --noche-primary-dark: 0.4 0.19 340;
-    --noche-accent: 0.42 0.14 295;
-    --noche-positive: 0.46 0.15 150;
-    --noche-warning: 0.5 0.16 75;
-    --noche-danger: 0.48 0.19 25;
-    --noche-ink: 0.16 0.02 300;
-    --noche-ink-muted: 0.38 0.02 300;
-    --noche-ink-faint: 0.55 0.02 300;
+    --noche-bg: 0.96 0.016 82;
+    --noche-surface: 0.99 0.008 85;
+    --noche-surface-2: 0.92 0.02 80;
+    --noche-surface-3: 0.87 0.024 78;
+    --noche-primary: 0.52 0.115 76;
+    --noche-primary-dark: 0.43 0.115 74;
+    --noche-accent: 0.46 0.16 33;
+    --noche-positive: 0.45 0.14 155;
+    --noche-warning: 0.55 0.15 80;
+    --noche-danger: 0.5 0.19 24;
+    --noche-ink: 0.18 0.014 75;
+    --noche-ink-muted: 0.4 0.02 74;
+    --noche-ink-faint: 0.55 0.018 76;
     /* Más oscuro que un simple -0.1L sobre el fondo: en modo día los bordes
        delimitan tarjetas, inputs y botones sobre fondos muy claros, y con
-       un contraste bajo (L 0.84 vs 0.97 de --noche-bg) casi desaparecían. */
-    --noche-border: 0.78 0.024 82;
+       un contraste bajo casi desaparecían. */
+    --noche-border: 0.8 0.022 80;
   }
 }
 

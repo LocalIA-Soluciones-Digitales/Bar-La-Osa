@@ -10,8 +10,8 @@ import type { FacturaFirmada } from "@/lib/ticketbai/types";
  * exacta, SignedProperties, KeyInfo, política de firma referenciada) es fácil de hacer mal de
  * forma que "parezca" firmado pero sea rechazado por Hacienda o, peor, aceptado pero inválido.
  * No tiene sentido escribirlo sin un certificado real contra el que probarlo en el entorno de
- * pruebas de Bizkaia — Palomita Bar SL todavía no tiene ese certificado (ver conversación:
- * necesita el certificado de representante/sello de entidad de la SL).
+ * pruebas de Bizkaia — el negocio todavía no tiene ese certificado (ver conversación:
+ * necesita el certificado de representante/sello de entidad correspondiente).
  *
  * Cuando haya certificado, esta función es el único sitio que hay que rellenar. Librerías
  * candidatas en Node.js: `xadesjs` (implementación XAdES completa) + `node-forge` o
@@ -26,7 +26,7 @@ export function getFirmanteTicketBai(): FirmanteTicketBai {
   return {
     async firmar(): Promise<FacturaFirmada> {
       throw new Error(
-        "Firma TicketBAI no configurada: falta el certificado digital de Palomita Bar SL " +
+        "Firma TicketBAI no configurada: falta el certificado digital del negocio " +
           "(certificado de representante o sello de entidad) y su integración XAdES-BES en " +
           "src/lib/ticketbai/firma.ts. Ver el comentario de este archivo.",
       );

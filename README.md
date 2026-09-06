@@ -1,16 +1,19 @@
-# Palomita Bar
+# Bar de Tapas La Osa
 
-Web y plataforma de pedidos en mesa de Palomita Bar (Barakaldo). Proyecto de
-[LocalIA Soluciones Digitales](https://github.com/LocalIA-Soluciones-Digitales).
+Web de Bar de Tapas La Osa, en Port d'Alcúdia (Mallorca): tapas mediterráneas,
+menú diario, terraza y reservas.
 
-Ver [`ARCHITECTURE.md`](./ARCHITECTURE.md) para la auditoría de la
-infraestructura compartida (Supabase multi-tenant de LocalIA), el estado
-actual del proyecto y el plan de migraciones propuesto.
+Este proyecto reutiliza la arquitectura completa de una plataforma de
+hostelería ya construida (pedido en mesa, cocina en vivo, TPV de barra,
+reservas, TicketBAI/Batuz) — ver [`ARCHITECTURE.md`](./ARCHITECTURE.md) para
+la historia técnica completa de esa plataforma (incluye el desarrollo
+original, hecho para otro negocio, del que hereda toda la infraestructura).
+La identidad de marca, contenidos y textos públicos son propios de La Osa.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- Supabase (Postgres, Auth, Storage, Realtime) — proyecto compartido de LocalIA
+- Supabase (Postgres, Auth, Storage, Realtime) — infraestructura multi-tenant compartida
 - Stripe Checkout + Webhooks
 - Vercel
 
@@ -21,17 +24,25 @@ npm install
 npm run dev
 ```
 
-Copia `.env.example` a `.env.local` y rellena las variables (ver
-`ARCHITECTURE.md` §7 para el detalle de cada una).
+Copia `.env.example` a `.env.local` y rellena las variables.
 
 ## Estado
 
-Fases 0-9 completas (auditoría, web pública, Supabase, pedidos, cocina en
-vivo, Stripe, administración, seguridad, verificación funcional). En
-producción en `palomita-bar.vercel.app`. Ver `ARCHITECTURE.md` §15 para el
-resumen de qué queda por hacer manualmente (básicamente: dar de alta
-Stripe) y el resto de fases en detalle.
+La capa pública (home, carta, bebidas, galería, reservas, opiniones) usa
+contenido de referencia estático (`src/lib/restaurant/static-content.ts`)
+mientras no exista un tenant Supabase real dado de alta para La Osa. Las
+funciones RPC (`src/lib/restaurant/queries.ts`) están intactas y listas para
+reconectarse en cuanto exista ese tenant — ver `ARCHITECTURE.md` para el
+patrón de aislamiento multi-tenant reutilizado.
 
-Web pública con identidad visual oscura y flujo de pedido en mesa con dos
-modos ("juntos" o cada comensal por separado, con reparto de cuenta y pago
-individual real por Stripe) — ver `ARCHITECTURE.md` §16.
+El panel `/admin` (POS, cocina, mesas, fidelización) conserva toda su lógica
+y solo se ha renombrado la marca visible; sigue necesitando ese mismo tenant
+para tener datos reales. El módulo TicketBAI/Batuz permanece desactivado
+(`TICKETBAI_ENABLED=false`) — es específico del País Vasco y no aplica a un
+negocio de Baleares sin adaptación; no se ha inventado ningún dato fiscal.
+
+Pendiente de decisión del usuario (no técnico): teléfono e Instagram
+públicos reales (no confirmados, por eso no aparecen todavía en la web),
+fotografía real del local para sustituir los tratamientos de color de
+portada/galería, y alta del tenant en Supabase cuando se quiera conectar
+carta/reservas/reseñas a datos reales.

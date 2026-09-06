@@ -1,5 +1,13 @@
 # Palomita Bar — Arquitectura
 
+> **Nota (rebrand a Bar de Tapas La Osa):** este documento es el registro histórico, sin
+> editar, de cómo se construyó la plataforma que ahora reutiliza La Osa (arquitectura
+> multi-tenant, schema `restaurant`, pedido en mesa, Stripe, TicketBAI). Se conserva tal
+> cual por su valor como referencia técnica, pero los datos concretos que menciona —
+> nombre comercial, dirección, tenant, `site_key`, capturas de contenido — son de
+> **Palomita Bar** (el negocio original), no de La Osa. Ver [`README.md`](./README.md)
+> para el estado actual de La Osa.
+
 Estado: **Fases 0 a 9 completadas.** Quedan acciones puntuales de Fase 10 (dominio propio,
 cuenta de Stripe real) que son decisiones/credenciales del usuario, detalladas en §10.
 Resumen: schema `restaurant` aplicado en el proyecto Supabase compartido, en producción en

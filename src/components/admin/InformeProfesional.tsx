@@ -276,7 +276,7 @@ export function InformeProfesional() {
       ["Producto", "Categoría", "Unidades", "Ventas (€)"],
       ...ventas.productos.map((p) => [p.nombre, p.categoria, p.unidades, formatCentimos(p.ventas_centimos)]),
     ];
-    descargarCSV(`ventas-palomita-bar-${etiqueta.replace(/\s+/g, "-")}.csv`, filas);
+    descargarCSV(`ventas-la-osa-${etiqueta.replace(/\s+/g, "-")}.csv`, filas);
   };
 
   return (
@@ -321,7 +321,7 @@ export function InformeProfesional() {
       </div>
 
       <div className="mt-6 hidden border-b border-noche-border pb-4 print:block">
-        <p className="text-xs uppercase tracking-widest2 text-noche-primary">Palomita Bar</p>
+        <p className="text-xs uppercase tracking-widest2 text-noche-primary">La Osa</p>
         <h1 className="mt-1 font-display text-2xl">Informe profesional — {etiqueta}</h1>
         <p className="mt-1 text-xs text-noche-ink-muted">
           Generado el {new Date().toLocaleDateString("es-ES")}

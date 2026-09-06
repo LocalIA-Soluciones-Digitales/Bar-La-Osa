@@ -24,7 +24,7 @@ async function enviarEmail(to: string, premioDescripcion: string, reglaNombre: s
     body: JSON.stringify({
       from,
       to,
-      subject: "Tienes un premio esperándote en Palomita Bar",
+      subject: "Tienes un premio esperándote en La Osa",
       text: `Gracias por venir tantas veces. Has conseguido: ${premioDescripcion} (${reglaNombre}). Enséñanos este correo en tu próxima visita para canjearlo.`,
     }),
   });

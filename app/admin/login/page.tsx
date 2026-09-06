@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
               <span className="font-display text-xl text-noche-primary">P</span>
             </div>
             <p className="mt-4 text-xs uppercase tracking-widest2 text-noche-primary">
-              Palomita Bar
+              La Osa
             </p>
             <h1 className="mt-1 font-display text-2xl text-noche-ink">Acceso equipo</h1>
             <p className="mt-1 text-xs text-noche-ink-faint">
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   className="w-full rounded-lg border border-noche-border bg-noche-surface-2 py-2.5 pl-10 pr-3 text-sm text-noche-ink outline-none transition-colors focus:border-noche-primary"
-                  placeholder="tú@palomitabar.com"
+                  placeholder="tú@barlaosa.com"
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-noche-ink-faint">
-          ¿Problemas para acceder? Contacta con quien gestiona el panel de Palomita Bar.
+          ¿Problemas para acceder? Contacta con quien gestiona el panel de La Osa.
         </p>
       </div>
     </div>

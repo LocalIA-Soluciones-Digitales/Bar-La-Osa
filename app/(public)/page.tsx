@@ -1,38 +1,31 @@
-import {
-  getCarta,
-  getCategorias,
-  getHorarioPublico,
-  getResenasAprobadas,
-  getSiteImages,
-} from "@/lib/restaurant/queries";
+import { CATEGORIAS, PRODUCTOS, RESENAS, SITE_IMAGES } from "@/lib/restaurant/static-content";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { CuratedSection } from "@/components/home/CuratedSection";
+import { TerraceSection } from "@/components/home/TerraceSection";
+import { CelebrationsSection } from "@/components/home/CelebrationsSection";
 import { ReviewsSection } from "@/components/home/ReviewsSection";
 import { AmbienceSection } from "@/components/home/AmbienceSection";
 import { LocationSection } from "@/components/home/LocationSection";
 
-export const revalidate = 60;
+// Contenido de la carta, imágenes de sitio y reseñas vienen de
+// static-content.ts mientras no haya un tenant Supabase real conectado
+// para La Osa (ver ARCHITECTURE.md y src/lib/restaurant/queries.ts, que
+// quedan intactos para reconectar esto con un cambio de import).
 
-export default async function HomePage() {
-  const [categorias, productos, siteImages, horario, resenas] = await Promise.all([
-    getCategorias(),
-    getCarta(),
-    getSiteImages(),
-    getHorarioPublico(),
-    getResenasAprobadas().catch(() => []),
-  ]);
-
-  const destacados = productos.filter((p) => p.destacado && p.disponible).slice(0, 6);
+export default function HomePage() {
+  const destacados = PRODUCTOS.filter((p) => p.destacado && p.disponible).slice(0, 6);
 
   return (
     <>
-      <HeroSection image={siteImages?.hero ?? null} />
-      <AboutSection image={siteImages?.about ?? null} />
-      <CuratedSection productos={destacados} categorias={categorias} />
-      <ReviewsSection resenas={resenas} />
-      <AmbienceSection images={siteImages?.ambiente ?? []} />
-      <LocationSection horario={horario} />
+      <HeroSection image={SITE_IMAGES} />
+      <AboutSection image={SITE_IMAGES} />
+      <CuratedSection productos={destacados} categorias={CATEGORIAS} />
+      <TerraceSection image={SITE_IMAGES} />
+      <CelebrationsSection />
+      <ReviewsSection resenas={RESENAS} />
+      <AmbienceSection images={SITE_IMAGES ?? []} />
+      <LocationSection horario={null} />
     </>
   );
 }

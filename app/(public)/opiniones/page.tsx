@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { getResenasAprobadas } from "@/lib/restaurant/queries";
+import { RESENAS } from "@/lib/restaurant/static-content";
 import { ResenaForm } from "@/components/resenas/ResenaForm";
 import { Stars } from "@/components/resenas/Stars";
 
 export const metadata: Metadata = {
   title: "Opiniones",
-  description: "Lee y comparte tu opinión sobre Palomita Bar, coctelería y picoteo en Barakaldo.",
+  description: "Lee y comparte tu opinión sobre Bar de Tapas La Osa, Port d'Alcúdia, Mallorca.",
 };
 
-export default async function OpinionesPage() {
-  const resenas = await getResenasAprobadas().catch(() => []);
+export default function OpinionesPage() {
+  const resenas = RESENAS;
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-24">
       <p className="text-xs uppercase tracking-widest2 text-noche-primary">Opiniones</p>
-      <h1 className="mt-4 font-display text-5xl text-noche-ink">Cuéntanos tu experiencia</h1>
+      <h1 className="mt-4 font-display text-5xl italic text-noche-ink">Cuéntanos tu experiencia</h1>
       <p className="mt-4 text-noche-ink-muted">
         Tu opinión se revisa antes de publicarse, para mantener las reseñas auténticas.
       </p>

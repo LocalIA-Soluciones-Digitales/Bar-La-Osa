@@ -98,7 +98,7 @@ export function AdminNav({ role }: { role: AdminRole }) {
           ) : null}
         </div>
       ) : (
-        <span className="mr-4 font-display text-lg text-noche-ink">Palomita</span>
+        <span className="mr-4 font-display text-lg text-noche-ink">La Osa</span>
       )}
 
       {links.map((link) => {

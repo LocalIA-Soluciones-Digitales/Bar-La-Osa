@@ -54,7 +54,7 @@ function leerConfiguracion() {
     serie: process.env.TICKETBAI_SERIE ?? "WEB",
     licenciaTbai: process.env.TICKETBAI_LICENCIA ?? "",
     nifEntidadDesarrolladora: process.env.TICKETBAI_ENTIDAD_DESARROLLADORA_NIF ?? "",
-    softwareNombre: process.env.TICKETBAI_SOFTWARE_NOMBRE ?? "Palomita Bar TPV",
+    softwareNombre: process.env.TICKETBAI_SOFTWARE_NOMBRE ?? "La Osa TPV",
     softwareVersion: process.env.TICKETBAI_SOFTWARE_VERSION ?? "1.0",
   };
 }
@@ -126,8 +126,8 @@ function filaADatosFactura(
 
 /**
  * Punto de entrada único: genera (o recupera, si ya existía) la factura TicketBAI de un
- * conjunto de pedidos. No hace nada si TICKETBAI_ENABLED no es "true" — hasta que Palomita
- * Bar SL tenga certificado digital y número de alta-inscripción TBAI, esto es un no-op y el
+ * conjunto de pedidos. No hace nada si TICKETBAI_ENABLED no es "true" — hasta que el negocio
+ * tenga certificado digital y número de alta-inscripción TBAI, esto es un no-op y el
  * ticket se imprime exactamente igual que hoy (ver src/lib/print/ticket.ts).
  */
 export async function emitirFacturaTicketBai(

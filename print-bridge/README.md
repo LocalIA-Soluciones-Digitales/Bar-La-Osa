@@ -1,6 +1,6 @@
 # Print bridge — comanda automática de cocina y barra
 
-Servicio local (Node.js) que se queda escuchando los pedidos de Palomita Bar
+Servicio local (Node.js) que se queda escuchando los pedidos de La Osa
 en Supabase y, en cuanto **se acepta** una comanda (botón "Aceptar" en
 `/admin/cocina`, desde la pestaña "Todos", "Cocina" o "Barra"), imprime
 automáticamente cada estación en su impresora, sin que nadie tenga que darle
@@ -87,9 +87,9 @@ Para que no dependa de tener una ventana de consola abierta y sobreviva a
 reinicios del PC, la forma más sencilla es con [NSSM](https://nssm.cc/):
 
 ```powershell
-nssm install PalomitaPrintBridge "C:\Program Files\nodejs\node.exe" "C:\ruta\a\print-bridge\src\index.js"
-nssm set PalomitaPrintBridge AppDirectory "C:\ruta\a\print-bridge"
-nssm start PalomitaPrintBridge
+nssm install LaOsaPrintBridge "C:\Program Files\nodejs\node.exe" "C:\ruta\a\print-bridge\src\index.js"
+nssm set LaOsaPrintBridge AppDirectory "C:\ruta\a\print-bridge"
+nssm start LaOsaPrintBridge
 ```
 
 Esto lo registra como servicio de Windows: arranca solo al encender el PC y
@@ -114,4 +114,4 @@ se reinicia si falla.
   set de comandos.
 - **No imprime nada al hacer un pedido**: comprueba en la consola que el
   canal Realtime dice `SUBSCRIBED`. Si no, revisa `BRIDGE_EMAIL` /
-  `BRIDGE_PASSWORD` y que esa cuenta tenga acceso a `/admin` de Palomita.
+  `BRIDGE_PASSWORD` y que esa cuenta tenga acceso a `/admin` de La Osa.

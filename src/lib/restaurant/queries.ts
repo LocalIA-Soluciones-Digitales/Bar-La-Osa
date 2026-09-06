@@ -15,11 +15,11 @@ import type {
   SiteImages,
 } from "@/lib/restaurant/types";
 
-const SITE_KEY = process.env.NEXT_PUBLIC_PALOMITA_SITE_KEY;
+const SITE_KEY = process.env.NEXT_PUBLIC_LAOSA_SITE_KEY;
 
 function siteKey(): string {
   if (!SITE_KEY) {
-    throw new Error("Falta NEXT_PUBLIC_PALOMITA_SITE_KEY en las variables de entorno.");
+    throw new Error("Falta NEXT_PUBLIC_LAOSA_SITE_KEY en las variables de entorno.");
   }
   return SITE_KEY;
 }

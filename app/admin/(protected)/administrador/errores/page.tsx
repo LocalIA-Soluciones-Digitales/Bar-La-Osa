@@ -35,7 +35,7 @@ export default function ErroresAdminPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <h1 className="font-display text-2xl text-noche-ink">Log de errores</h1>
-      <p className="mt-1 text-sm text-noche-ink-muted">Fallos registrados en la web de Palomita.</p>
+      <p className="mt-1 text-sm text-noche-ink-muted">Fallos registrados en la web de La Osa.</p>
 
       {error ? <p className="mt-4 text-sm text-noche-danger">{error}</p> : null}
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { MoonIcon, SunIcon } from "@/components/icons";
 
-const STORAGE_KEY = "palomita.tema";
+const STORAGE_KEY = "laosa.tema";
 
 /**
  * La paleta "noche" está pensada para el ambiente nocturno del local, pero

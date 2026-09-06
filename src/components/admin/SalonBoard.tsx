@@ -214,7 +214,7 @@ async function imprimirCuentaMesa(mesa: MesaEstadoAdmin, etiqueta: string) {
     }));
 
   // Emisión TicketBAI: no-op (habilitado: false) mientras TICKETBAI_ENABLED no esté puesto a
-  // mano en el servidor — Palomita Bar SL todavía no tiene certificado digital. Si algo falla
+  // mano en el servidor — el negocio todavía no tiene certificado digital. Si algo falla
   // (red, servidor, etc.) el ticket se imprime igual que hoy, sin bloquear al camarero.
   let ticketBai: Parameters<typeof renderTicketCuentaHTML>[0]["ticketBai"] = null;
   try {

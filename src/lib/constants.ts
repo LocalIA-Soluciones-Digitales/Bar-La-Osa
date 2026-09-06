@@ -1,29 +1,31 @@
 export const SITE = {
-  name: "Palomita Bar",
-  tagline: "Coctelería y picoteo en Barakaldo",
-  nif: "22756634C",
+  name: "Bar de Tapas La Osa",
+  shortName: "La Osa",
+  tagline: "Tapas mediterráneas en Port d'Alcúdia",
+  // Aviso: no hay teléfono ni Instagram confirmados públicamente para este
+  // negocio — se dejan en null a propósito (ver SITE.phone/instagram) en vez
+  // de inventar un dato que un cliente real podría llamar o buscar.
   address: {
-    line1: "Gernikako Arbola Etorbidea 6A",
-    postalCode: "48902",
-    city: "Barakaldo",
-    province: "Bizkaia",
+    line1: "Carretera d'Artà / Carrer de la Punta 30",
+    postalCode: "07400",
+    city: "Alcúdia",
+    province: "Mallorca",
   },
-  phone: "+34 686 53 03 10",
-  phoneHref: "tel:+34686530310",
-  instagram: {
-    handle: "@palomita_bar",
-    url: "https://www.instagram.com/palomita_bar",
-  },
-  googleReviewsUrl: "https://www.google.com/search?q=Palomita+Bar+Barakaldo+reseñas",
-  // Editable desde /admin/configuracion; este valor es el fallback si no hay horario en BD.
-  hoursNote:
-    "Lunes a jueves: 9:00–23:30\nViernes: 9:00–3:00\nSábado: 10:00–3:00\nDomingo: 10:00–23:00",
+  phone: null as string | null,
+  phoneHref: null as string | null,
+  instagram: null as { handle: string; url: string } | null,
+  googleReviewsUrl:
+    "https://www.google.com/search?q=Bar+de+Tapas+La+Osa+Alcúdia+reseñas",
+  // "Aproximado", como se indica en la información pública disponible.
+  // Editable desde /admin/configuracion en cuanto haya un tenant conectado;
+  // este valor es el contenido de referencia mientras tanto.
+  hoursNote: "Viernes a miércoles: 7:30–23:00\nJueves: cerrado",
 } as const;
 
 export const NAV_LINKS = [
-  { href: "/#nosotros", label: "Historia" },
+  { href: "/#esencia", label: "Nuestra Esencia" },
   { href: "/carta", label: "Carta" },
-  { href: "/cocteleria", label: "Coctelería" },
+  { href: "/bebidas", label: "Bebidas" },
   { href: "/galeria", label: "Galería" },
   { href: "/reservar", label: "Reservar" },
   { href: "/opiniones", label: "Opiniones" },

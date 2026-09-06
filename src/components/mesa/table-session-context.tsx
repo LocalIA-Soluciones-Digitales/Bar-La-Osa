@@ -21,7 +21,7 @@ interface StoredContext {
 
 function deviceId(): string {
   if (typeof window === "undefined") return "";
-  const KEY = "palomita.device_id";
+  const KEY = "laosa.device_id";
   let id = window.localStorage.getItem(KEY);
   if (!id) {
     id = crypto.randomUUID();
@@ -31,7 +31,7 @@ function deviceId(): string {
 }
 
 function storageKey(mesaIdentificador: string): string {
-  return `palomita.mesa.${mesaIdentificador}`;
+  return `laosa.mesa.${mesaIdentificador}`;
 }
 
 function readStored(mesaIdentificador: string): StoredContext | null {

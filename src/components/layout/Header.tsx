@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { Logo } from "@/components/layout/Logo";
 import { InstagramIcon } from "@/components/icons";
 
 export function Header() {
@@ -37,27 +37,8 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20">
-        <Link href="/" className="flex items-center gap-2.5 leading-tight">
-          <Image
-            src="/images/logo-palomita.png"
-            alt=""
-            width={94}
-            height={80}
-            priority
-            className="h-9 w-auto md:h-10"
-          />
-          <span>
-            <span
-              className={`block font-display text-xl tracking-wide transition-colors ${overPhoto ? "text-white" : "text-noche-ink"}`}
-            >
-              Palomita Bar
-            </span>
-            <span
-              className={`block text-[10px] uppercase tracking-widest2 transition-colors ${overPhoto ? "text-white/70" : "text-noche-ink-muted"}`}
-            >
-              Coctelería &amp; Picoteo
-            </span>
-          </span>
+        <Link href="/" className="transition-colors">
+          <Logo size="sm" light={overPhoto} />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -89,15 +70,17 @@ export function Header() {
           >
             Pedir
           </Link>
-          <a
-            href={SITE.instagram.url}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram de Palomita Bar"
-            className={`transition-colors hover:text-noche-primary ${overPhoto ? "text-white/70" : "text-noche-ink-muted"}`}
-          >
-            <InstagramIcon className="h-5 w-5" />
-          </a>
+          {SITE.instagram ? (
+            <a
+              href={SITE.instagram.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Instagram de ${SITE.name}`}
+              className={`transition-colors hover:text-noche-primary ${overPhoto ? "text-white/70" : "text-noche-ink-muted"}`}
+            >
+              <InstagramIcon className="h-5 w-5" />
+            </a>
+          ) : null}
           <ThemeToggle
             className={
               overPhoto

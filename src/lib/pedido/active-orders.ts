@@ -1,4 +1,4 @@
-const STORAGE_KEY = "palomita:pedidos-activos";
+const STORAGE_KEY = "laosa:pedidos-activos";
 const MAX_PEDIDOS = 5;
 
 interface PedidoActivoRef {

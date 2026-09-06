@@ -5,9 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Identidad oscura única para toda la app: web pública (home, carta,
-        // coctelería, historia, galería, contacto, flujo de pedido en mesa)
-        // y panel /admin + /cocina.
+        // Identidad "Mediterranean Luxury" única para toda la app: web
+        // pública (home, carta, bebidas, galería, reservas, opiniones,
+        // flujo de pedido en mesa) y panel /admin + /cocina.
         noche: {
           bg: "oklch(var(--noche-bg) / <alpha-value>)",
           surface: "oklch(var(--noche-surface) / <alpha-value>)",

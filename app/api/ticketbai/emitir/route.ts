@@ -7,7 +7,7 @@ import { SITE } from "@/lib/constants";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const PALOMITA_CLIENTE_ID = process.env.NEXT_PUBLIC_PALOMITA_CLIENTE_ID;
+const LAOSA_CLIENTE_ID = process.env.NEXT_PUBLIC_LAOSA_CLIENTE_ID;
 
 interface EmitirBody {
   mesaId?: string;
@@ -33,8 +33,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
-  if (!PALOMITA_CLIENTE_ID) {
-    return NextResponse.json({ error: "Falta NEXT_PUBLIC_PALOMITA_CLIENTE_ID" }, { status: 500 });
+  if (!LAOSA_CLIENTE_ID) {
+    return NextResponse.json({ error: "Falta NEXT_PUBLIC_LAOSA_CLIENTE_ID" }, { status: 500 });
   }
 
   let body: EmitirBody;
@@ -59,11 +59,15 @@ export async function POST(request: Request) {
   const supabaseServiceRole = createSupabaseServiceRoleClient();
   try {
     const resultado = await emitirFacturaTicketBai(supabaseServiceRole, {
-      clienteId: PALOMITA_CLIENTE_ID,
+      clienteId: LAOSA_CLIENTE_ID,
       mesaId,
       pedidoIds,
-      nifEmisor: SITE.nif,
-      // Debe ser la razón social LEGAL registrada de Palomita Bar SL, que puede no coincidir
+      // Sin NIF real confirmado para La Osa todavía (ver TICKETBAI_NIF_EMISOR en
+      // .env.example) — irrelevante en la práctica: emitirFacturaTicketBai devuelve
+      // { habilitado: false } antes de usar este valor mientras TICKETBAI_ENABLED no
+      // sea "true", así que nunca se emite una factura con un NIF vacío o inventado.
+      nifEmisor: process.env.TICKETBAI_NIF_EMISOR ?? "",
+      // Debe ser la razón social LEGAL registrada del negocio, que puede no coincidir
       // con el nombre comercial de SITE.name — ajustar con TICKETBAI_RAZON_SOCIAL si difiere.
       razonSocialEmisor: process.env.TICKETBAI_RAZON_SOCIAL ?? SITE.name,
     });

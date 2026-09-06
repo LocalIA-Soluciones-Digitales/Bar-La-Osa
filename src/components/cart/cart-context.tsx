@@ -30,7 +30,7 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STORAGE_PREFIX = "palomita:carrito:";
+const STORAGE_PREFIX = "laosa:carrito:";
 // El carrito guardado se descarta pasado este tiempo: evita reabrir, horas o
 // días después, un pedido con precios/disponibilidad ya caducados.
 const MAX_EDAD_MS = 6 * 60 * 60 * 1000;
