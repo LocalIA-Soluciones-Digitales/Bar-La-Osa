@@ -60,6 +60,17 @@ export function LocationSection({ horario }: { horario: string | null }) {
                         <PhoneIcon className="h-4 w-4 text-noche-primary" />
                         {SITE.phone}
                       </a>
+                      {SITE.phoneSecondary ? (
+                        <>
+                          {" · "}
+                          <a
+                            href={SITE.phoneSecondaryHref ?? undefined}
+                            className="transition-colors hover:text-noche-primary"
+                          >
+                            {SITE.phoneSecondary}
+                          </a>
+                        </>
+                      ) : null}
                     </p>
                   ) : null}
                   {SITE.instagram ? (

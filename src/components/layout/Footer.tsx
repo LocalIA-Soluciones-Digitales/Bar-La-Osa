@@ -87,6 +87,17 @@ export function Footer() {
                   <a href={SITE.phoneHref ?? undefined} className="transition-colors hover:text-noche-primary">
                     {SITE.phone}
                   </a>
+                  {SITE.phoneSecondary ? (
+                    <>
+                      {" · "}
+                      <a
+                        href={SITE.phoneSecondaryHref ?? undefined}
+                        className="transition-colors hover:text-noche-primary"
+                      >
+                        {SITE.phoneSecondary}
+                      </a>
+                    </>
+                  ) : null}
                 </p>
               ) : null}
             </address>

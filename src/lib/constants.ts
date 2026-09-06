@@ -2,20 +2,24 @@ export const SITE = {
   name: "Bar de Tapas La Osa",
   shortName: "La Osa",
   tagline: "Tapas mediterráneas en Port d'Alcúdia",
-  // Aviso: no hay teléfono ni Instagram confirmados públicamente para este
-  // negocio — se dejan en null a propósito (ver SITE.phone/instagram) en vez
-  // de inventar un dato que un cliente real podría llamar o buscar.
+  // Dirección y teléfonos: confirmados por el propio negocio (tarjeta/flyer
+  // real, 2026-09-06) — ya no son un dato sin verificar.
   address: {
-    line1: "Carretera d'Artà / Carrer de la Punta 30",
+    line1: "Ctra. Artà, 30",
     postalCode: "07400",
-    city: "Alcúdia",
+    city: "Port d'Alcúdia",
     province: "Mallorca",
   },
-  phone: null as string | null,
-  phoneHref: null as string | null,
+  // Línea principal (fija) y una segunda de contacto (móvil).
+  phone: "971 781 810",
+  phoneHref: "tel:+34971781810",
+  phoneSecondary: "681 248 898",
+  phoneSecondaryHref: "tel:+34681248898",
+  // Instagram no confirmado todavía — se deja en null a propósito en vez de
+  // inventar o adivinar un @handle.
   instagram: null as { handle: string; url: string } | null,
   googleReviewsUrl:
-    "https://www.google.com/search?q=Bar+de+Tapas+La+Osa+Alcúdia+reseñas",
+    "https://www.google.com/search?q=Bar+de+Tapas+La+Osa+Port+d'Alcúdia+reseñas",
   // "Aproximado", como se indica en la información pública disponible.
   // Editable desde /admin/configuracion en cuanto haya un tenant conectado;
   // este valor es el contenido de referencia mientras tanto.
