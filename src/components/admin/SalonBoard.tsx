@@ -176,7 +176,7 @@ function todayISO(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Madrid" });
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 function pedirUrl(identificador: string): string {
   return `${SITE_URL}/pedir?mesa=${identificador}`;

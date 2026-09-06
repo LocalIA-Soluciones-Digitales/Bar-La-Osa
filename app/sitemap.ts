@@ -5,7 +5,7 @@ import type { MetadataRoute } from "next";
 const routes = ["", "/carta", "/bebidas", "/galeria", "/reservar", "/opiniones"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://barlaosa.es";
 
   return routes.map((route) => ({
     url: `${base}${route}`,

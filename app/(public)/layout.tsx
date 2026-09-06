@@ -19,7 +19,7 @@ const DIA_SCHEMA_ORG: Record<(typeof DIAS_SEMANA)[number], string> = {
 // ThemeToggle no provoque un parpadeo del tema oscuro al cargar la página.
 const THEME_INIT_SCRIPT = `try{if(localStorage.getItem("laosa.tema")==="dia"){document.documentElement.setAttribute("data-theme","dia")}}catch(e){}`;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://barlaosa.es";
 
 export default function PublicLayout({
   children,

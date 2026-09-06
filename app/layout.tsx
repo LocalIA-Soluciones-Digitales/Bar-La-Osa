@@ -17,7 +17,9 @@ const sans = Inter({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://barlaosa.es";
+// "||", no "??": una env var definida pero vacía ("") no es nullish, así
+// que "??" no la sustituye y new URL("") revienta el build entero.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://barlaosa.es";
 const DESCRIPTION =
   "Bar de Tapas La Osa: tapas españolas, raciones, frituras y menú diario en el corazón de Port d'Alcúdia, Mallorca. Terraza, reservas y comida para llevar.";
 

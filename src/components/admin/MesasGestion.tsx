@@ -16,7 +16,7 @@ import type { MesaAdmin, ZonaAdmin } from "@/lib/restaurant/admin-types";
 import { prefijoZona } from "@/lib/restaurant/mesa-label";
 import { DownloadIcon, PlusIcon, RefreshIcon } from "@/components/icons";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 function pedirUrl(identificador: string): string {
   return `${SITE_URL}/pedir?mesa=${identificador}`;
