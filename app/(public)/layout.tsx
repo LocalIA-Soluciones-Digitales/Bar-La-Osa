@@ -2,7 +2,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ActiveOrderBanner } from "@/components/pedido/ActiveOrderBanner";
 import { SITE } from "@/lib/constants";
-import { DIAS_SEMANA, semanaPorDefecto } from "@/lib/horario";
+import { getHorarioPublico } from "@/lib/restaurant/queries";
+import { DIAS_SEMANA, parseHorario, semanaPorDefecto } from "@/lib/horario";
 
 const DIA_SCHEMA_ORG: Record<(typeof DIAS_SEMANA)[number], string> = {
   Lunes: "Monday",
@@ -19,17 +20,23 @@ const DIA_SCHEMA_ORG: Record<(typeof DIAS_SEMANA)[number], string> = {
 // ThemeToggle no provoque un parpadeo del tema oscuro al cargar la página.
 const THEME_INIT_SCRIPT = `try{if(localStorage.getItem("laosa.tema")==="dia"){document.documentElement.setAttribute("data-theme","dia")}}catch(e){}`;
 
+// "||", no "??": una env var definida pero vacía ("") no es nullish, así
+// que "??" no la sustituye y new URL("") revienta el build entero.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://barlaosa.es";
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Horario de referencia (ver src/lib/horario.ts): mientras no haya un
-  // tenant conectado, se usa el mismo horario aproximado en todas partes
-  // (JSON-LD, LocationSection, ReservaForm) en vez de una RPC en vivo.
-  const semana = semanaPorDefecto();
+  let semana = semanaPorDefecto();
+  try {
+    const horario = await getHorarioPublico();
+    semana = parseHorario(horario) ?? semanaPorDefecto();
+  } catch {
+    // Si la RPC falla (o no hay tenant conectado todavía), se mantiene el
+    // horario aproximado por defecto (ver src/lib/horario.ts).
+  }
 
   const openingHoursSpecification = semana
     .map((dia, index) => ({ dia, nombre: DIAS_SEMANA[index]! }))

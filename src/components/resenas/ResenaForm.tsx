@@ -81,9 +81,10 @@ export function ResenaForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <label className="block">
+      <label htmlFor="resena-nombre" className="block">
         <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Nombre</span>
         <input
+          id="resena-nombre"
           type="text"
           required
           value={nombre}
@@ -98,9 +99,10 @@ export function ResenaForm() {
         <RatingInput value={valoracion} onChange={setValoracion} />
       </div>
 
-      <label className="block">
+      <label htmlFor="resena-comentario" className="block">
         <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Tu opinión</span>
         <textarea
+          id="resena-comentario"
           required
           value={comentario}
           onChange={(e) => setComentario(e.target.value)}

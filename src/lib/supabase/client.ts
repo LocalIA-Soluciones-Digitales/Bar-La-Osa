@@ -23,15 +23,13 @@ function getClient(): SupabaseClient {
 // (webhook de Stripe, admin), fuera de este archivo.
 //
 // Construido perezosamente detrás de un Proxy en vez de al importar el
-// módulo: la web pública de La Osa hoy no llama a ninguna de las funciones
-// de queries.ts (usa contenido estático, ver static-content.ts), pero
-// algunos módulos (p. ej. app/error.tsx, vía crearErrorLog) siguen
-// importando ese archivo. Si el cliente se construyera al importar,
-// faltar las variables de entorno de Supabase rompería la carga de
-// cualquier página que arrastrara esa importación, aunque nunca llegara a
-// usar el cliente. Con el Proxy, el error solo salta si de verdad se
-// invoca un método (p. ej. `supabase.rpc(...)`), momento en el que ya hay
-// un `.catch()` en todas las llamadas.
+// módulo: si el cliente se construyera al importar, faltar las variables
+// de entorno de Supabase (p. ej. en un build sin credenciales, o antes de
+// configurarlas en un entorno nuevo) rompería la carga de cualquier página
+// que arrastrara esa importación (p. ej. app/error.tsx, vía crearErrorLog),
+// aunque nunca llegara a usar el cliente. Con el Proxy, el error solo
+// salta si de verdad se invoca un método (p. ej. `supabase.rpc(...)`),
+// momento en el que ya hay un `.catch()` en todas las llamadas.
 export const supabase: SupabaseClient = new Proxy({} as SupabaseClient, {
   get(_target, prop, receiver) {
     return Reflect.get(getClient(), prop, receiver);

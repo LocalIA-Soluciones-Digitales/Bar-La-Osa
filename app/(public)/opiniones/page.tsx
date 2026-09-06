@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { RESENAS } from "@/lib/restaurant/static-content";
+import { getResenasAprobadas } from "@/lib/restaurant/queries";
 import { ResenaForm } from "@/components/resenas/ResenaForm";
 import { Stars } from "@/components/resenas/Stars";
 
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: "Lee y comparte tu opinión sobre Bar de Tapas La Osa, Port d'Alcúdia, Mallorca.",
 };
 
-export default function OpinionesPage() {
-  const resenas = RESENAS;
+export default async function OpinionesPage() {
+  const resenas = await getResenasAprobadas().catch(() => []);
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-24">

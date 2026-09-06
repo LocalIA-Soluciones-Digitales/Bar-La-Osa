@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { CATEGORIAS, PRODUCTOS } from "@/lib/restaurant/static-content";
+import { getCarta, getCategorias } from "@/lib/restaurant/queries";
 import { CategoryMenu } from "@/components/menu/CategoryMenu";
 import { buildMenuJsonLd } from "@/lib/restaurant/menu-jsonld";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Carta",
@@ -14,9 +16,13 @@ export default async function CartaPage({
 }: {
   searchParams: Promise<{ product?: string }>;
 }) {
-  const { product } = await searchParams;
-  const comida = CATEGORIAS.filter((categoria) => categoria.tipo === "comida");
-  const menuJsonLd = buildMenuJsonLd(comida, PRODUCTOS, "Carta — Bar de Tapas La Osa");
+  const [{ product }, categorias, productos] = await Promise.all([
+    searchParams,
+    getCategorias(),
+    getCarta(),
+  ]);
+  const comida = categorias.filter((categoria) => categoria.tipo === "comida");
+  const menuJsonLd = buildMenuJsonLd(comida, productos, "Carta — Bar de Tapas La Osa");
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-24">
@@ -36,7 +42,7 @@ export default async function CartaPage({
       </p>
 
       <div className="mt-8">
-        <CategoryMenu categorias={comida} productos={PRODUCTOS} highlightProductId={product} />
+        <CategoryMenu categorias={comida} productos={productos} highlightProductId={product} />
       </div>
     </div>
   );

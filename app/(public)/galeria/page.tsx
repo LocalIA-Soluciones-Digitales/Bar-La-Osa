@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   description: "Galería de Bar de Tapas La Osa, Port d'Alcúdia, Mallorca.",
 };
 
-// Sin reportaje fotográfico real todavía (ver static-content.ts): en vez de
-// dejar la página vacía o reutilizar fotografía de otro negocio, cada
-// tarjeta usa un tratamiento editorial de color con la paleta de marca.
-// Sustituir `gradient` por una foto real es un cambio local a esta lista,
-// sin tocar el layout de la galería.
+// Sin reportaje fotográfico real todavía: en vez de dejar la página vacía o
+// reutilizar fotografía de otro negocio, cada tarjeta usa un tratamiento
+// editorial de color con la paleta de marca. Sustituir `gradient` por una
+// foto real (subida desde /admin/configuracion) es un cambio local a esta
+// lista, sin tocar el layout de la galería.
 const PIEZAS = [
   { titulo: "Terraza al atardecer", gradient: "linear-gradient(155deg, oklch(0.5 0.09 55), oklch(0.24 0.04 40))", span: "row-span-2" },
   { titulo: "Tapas de la casa", gradient: "linear-gradient(155deg, oklch(0.46 0.05 70), oklch(0.2 0.03 60))" },

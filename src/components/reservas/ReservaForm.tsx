@@ -107,9 +107,10 @@ export function ReservaForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block">
+        <label htmlFor="reserva-nombre" className="block">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Nombre</span>
           <input
+            id="reserva-nombre"
             type="text"
             required
             value={nombre}
@@ -118,9 +119,10 @@ export function ReservaForm() {
             className="mt-1 w-full rounded-lg border border-noche-border bg-noche-surface px-4 py-3 text-noche-ink"
           />
         </label>
-        <label className="block">
+        <label htmlFor="reserva-telefono" className="block">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Teléfono</span>
           <input
+            id="reserva-telefono"
             type="tel"
             required
             value={telefono}
@@ -129,11 +131,12 @@ export function ReservaForm() {
             className="mt-1 w-full rounded-lg border border-noche-border bg-noche-surface px-4 py-3 text-noche-ink"
           />
         </label>
-        <label className="block">
+        <label htmlFor="reserva-email" className="block">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">
             Correo (opcional)
           </span>
           <input
+            id="reserva-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -141,11 +144,12 @@ export function ReservaForm() {
             className="mt-1 w-full rounded-lg border border-noche-border bg-noche-surface px-4 py-3 text-noche-ink"
           />
         </label>
-        <label className="block">
+        <label htmlFor="reserva-personas" className="block">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">
             Nº de personas
           </span>
           <input
+            id="reserva-personas"
             type="number"
             required
             min={1}
@@ -155,9 +159,10 @@ export function ReservaForm() {
             className="mt-1 w-full rounded-lg border border-noche-border bg-noche-surface px-4 py-3 text-noche-ink"
           />
         </label>
-        <label className="block min-w-0">
+        <label htmlFor="reserva-fecha" className="block min-w-0">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Fecha</span>
           <input
+            id="reserva-fecha"
             type="date"
             required
             min={hoyISO()}
@@ -166,9 +171,10 @@ export function ReservaForm() {
             className="mt-1 block w-full max-w-full appearance-none rounded-lg border border-noche-border bg-noche-surface px-4 py-3 text-noche-ink"
           />
         </label>
-        <label className="block min-w-0">
+        <label htmlFor="reserva-hora" className="block min-w-0">
           <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">Hora</span>
           <input
+            id="reserva-hora"
             type="time"
             required
             value={hora}
@@ -187,11 +193,12 @@ export function ReservaForm() {
         </label>
       </div>
 
-      <label className="block">
+      <label htmlFor="reserva-notas" className="block">
         <span className="text-xs uppercase tracking-widest2 text-noche-ink-muted">
           Notas (opcional)
         </span>
         <textarea
+          id="reserva-notas"
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
           maxLength={300}
